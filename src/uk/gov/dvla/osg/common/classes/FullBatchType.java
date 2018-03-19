@@ -1,10 +1,11 @@
 package uk.gov.dvla.osg.common.classes;
 
 public enum FullBatchType {
-	FLEETE("FLEET"), 
-	FLEETW("FLEET"), 
+	
 	CLERICALE("CLERICAL"), 
 	CLERICALW("CLERICAL"), 
+	FLEETE("FLEET"), 
+	FLEETW("FLEET"), 
 	MULTIE("MULTI"), 
 	MULTIW("MULTI"), 
 	REJECTE("REJECT"),
@@ -15,6 +16,8 @@ public enum FullBatchType {
 	SORTEDW("SORTED"),
 	SORTINGE("SORTING"),
 	SORTINGW("SORTING"),
+	UNCODEDE("UNCODED"),
+	UNCODEDW("UNCODED"),
 	UNSORTEDE("UNSORTED"), 
 	UNSORTEDW("UNSORTED");
 	
@@ -23,14 +26,7 @@ public enum FullBatchType {
 	private FullBatchType(String batchType) {
         this.batchType = batchType;
     }
-/*	// OVERLOADED CONSTRUCTOR??
-	private FullBatchType(BatchType batchType, String lang) {
-        this.batchType = batchType.name()+lang;
-    }*/
-/*	// OVERLOADED CONSTRUCTOR??
-	FullBatchType(BatchType batchType, Language lang) {
-        this.batchType = batchType.name()+lang;
-    }*/
+
 	public String getValue() {
 		return this.batchType;
 	}

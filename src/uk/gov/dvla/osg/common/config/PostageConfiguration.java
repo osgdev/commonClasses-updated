@@ -1,9 +1,13 @@
 package uk.gov.dvla.osg.common.config;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PostageConfiguration {
 	
@@ -13,7 +17,7 @@ public class PostageConfiguration {
 	private String ukmMAcc, ukmFAcc, ukmResourcePath, ukmItemIdLookupFile, ukmMTrayLookupFile,
 		ukmFTrayLookupFile, ukmManifestDestination, ukmManifestArchive, ukmSoapDestination,
 		ukmSoapArchive, ukmBatchTypes, ukmConsignorFileDestination, ukmConsignorDestinationDepartment;
-	private int ukmMinimumTrayVolume, ukmMinimumCompliance;
+	private int ukmMinimumTrayVolume, ukmMinimumCompliance, maxTrayWeight;
 
 	private String unsortedAccountNo, unsortedService, unsortedProduct, unsortedFormat;
 	private String ocrProduct, ocrFormat;
@@ -73,6 +77,7 @@ public class PostageConfiguration {
 		requiredFields.add("ukm.soapfile.DestinationPath");
 		requiredFields.add("ukm.soapfile.ArchivePath");
 		requiredFields.add("ukm.minimumTrayVolume");
+		requiredFields.add("ukm.maxTrayWeight");
 		requiredFields.add("ukm.minimumCompliance");
 		requiredFields.add("ukm.batchTypes");
 		//requiredFields.add("ukm.consignorFileDestination");
@@ -180,6 +185,9 @@ public class PostageConfiguration {
 			    	} else if( "ukm.minimumTrayVolume".equalsIgnoreCase(attribute) ){
 			    		this.ukmMinimumTrayVolume=Integer.parseInt(value);
 			    		requiredFields.remove("ukm.minimumTrayVolume");
+			    	} else if( "ukm.maxTrayWeight".equalsIgnoreCase(attribute) ){
+			    		this.maxTrayWeight=Integer.parseInt(value);
+			    		requiredFields.remove("ukm.maxTrayWeight");
 			    	} else if( "ukm.minimumCompliance".equalsIgnoreCase(attribute) ){
 			    		this.ukmMinimumCompliance=Integer.parseInt(value);
 			    		requiredFields.remove("ukm.minimumCompliance");
@@ -505,6 +513,10 @@ public class PostageConfiguration {
 
 	public void setMmAppname(String mmAppname) {
 		this.mmAppname = mmAppname;
+	}
+
+	public double getMaxTrayWeight() {
+		return maxTrayWeight;
 	}
 	
 	
