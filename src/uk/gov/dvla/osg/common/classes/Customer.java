@@ -289,7 +289,7 @@ public class Customer {
 	}
 
 	public boolean isEog() {
-		return StringUtils.isNotEmpty(eog);
+		return StringUtils.isNotBlank(eog);
 	}
 
 	public int getNoOfPages() {
@@ -402,7 +402,7 @@ public class Customer {
 	}
 
 	public String getSot() {
-		return sot;
+		return sot == null ? "" : sot;
 	}
 
 	public void setSot(String sot) {
@@ -418,7 +418,7 @@ public class Customer {
 	}
 
 	public boolean isSot() {
-		return StringUtils.isNotEmpty(sot);
+		return StringUtils.isNotBlank(sot);
 	}
 
 	public void updateBatchType(String newBatchType, Map<String, Integer> map) {

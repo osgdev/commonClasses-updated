@@ -41,7 +41,7 @@ public class PostageConfiguration {
 				missingFields = missingFields + str + ",";
 			}
 			
-			LOGGER.fatal("Missing values from '{}' are '{}'",filename,missingFields);
+			LOGGER.fatal("Missing values from '{}' are '{}'", filename,missingFields);
 			System.exit(1);
 		}
 	}
@@ -183,13 +183,13 @@ public class PostageConfiguration {
 			    		this.ukmSoapArchive=value;
 			    		requiredFields.remove("ukm.soapfile.ArchivePath");
 			    	} else if( "ukm.minimumTrayVolume".equalsIgnoreCase(attribute) ){
-			    		this.ukmMinimumTrayVolume=Integer.parseInt(value);
+			    		this.ukmMinimumTrayVolume=Integer.valueOf(value);
 			    		requiredFields.remove("ukm.minimumTrayVolume");
 			    	} else if( "ukm.maxTrayWeight".equalsIgnoreCase(attribute) ){
-			    		this.maxTrayWeight=Integer.parseInt(value);
+			    		this.maxTrayWeight=Integer.valueOf(value);
 			    		requiredFields.remove("ukm.maxTrayWeight");
 			    	} else if( "ukm.minimumCompliance".equalsIgnoreCase(attribute) ){
-			    		this.ukmMinimumCompliance=Integer.parseInt(value);
+			    		this.ukmMinimumCompliance=Integer.valueOf(value);
 			    		requiredFields.remove("ukm.minimumCompliance");
 			    	} else if( "ukm.batchTypes".equalsIgnoreCase(attribute) ){
 			    		this.ukmBatchTypes=value;
