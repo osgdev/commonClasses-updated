@@ -1,34 +1,33 @@
 package uk.gov.dvla.osg.common.config;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import uk.gov.dvla.osg.common.classes.Insert;
+
 public class InsertLookup {
 	
 	private static final Logger LOGGER = LogManager.getLogger();
-	private String filePath, ref;
-	private float thickness, weight;
-	private int hopperCode;
-	private HashMap<String, InsertLookup> lookup = new HashMap<String, InsertLookup>();
+	private HashMap<String, Insert> lookup = new HashMap<>();
 	
-	public InsertLookup(String filePath){
+	public InsertLookup(String filePath) {
 		
-		LOGGER.info("Creating Insert Lookup..");
-		this.filePath=filePath;
-		LOGGER.info("File '{}' exists",filePath);
+		LOGGER.trace("Creating Insert Lookup..");
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 			String line;
 		    while ((line = br.readLine()) != null) {
 		    	String[] array = line.split(",");
 		    	if( !("INSERT REF".equals(array[0].trim())) ) {
-		    		InsertLookup ins = new InsertLookup(filePath, array[0].trim(), 
-		    				Float.parseFloat(array[1].trim()), 
-		    				Float.parseFloat(array[2].trim()), 
-		    				Integer.parseInt(array[3].trim()) );
-		    		lookup.put(array[0].trim(), ins);
+		    		lookup.put(array[0].trim(), new Insert( 
+		    				Double.parseDouble(array[1].trim()), 
+		    				Double.parseDouble(array[2].trim()), 
+		    				Integer.parseInt(array[3].trim())));
 		    	}
 		    }
 		}catch (IndexOutOfBoundsException e){
@@ -46,60 +45,8 @@ public class InsertLookup {
 		}
 	}
 
-	public InsertLookup(String filePath, String ref, float thickness, float weight, int hopperCode){
-		this.filePath=filePath;
-		this.ref =ref;
-		this.thickness=thickness;
-		this.weight=weight;
-		this.hopperCode=hopperCode;
-	}
-	
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	public String getRef() {
-		return ref;
-	}
-
-	public void setRef(String ref) {
-		this.ref = ref;
-	}
-
-	public float getThickness() {
-		return thickness;
-	}
-
-	public void setThickness(float thickness) {
-		this.thickness = thickness;
-	}
-
-	public HashMap<String, InsertLookup> getLookup() {
+	public HashMap<String, Insert> getLookup() {
 		return lookup;
-	}
-
-	public void setLookup(HashMap<String, InsertLookup> lookup) {
-		this.lookup = lookup;
-	}
-
-	public float getWeight() {
-		return weight;
-	}
-
-	public void setWeight(float weight) {
-		this.weight = weight;
-	}
-
-	public int getHopperCode() {
-		return hopperCode;
-	}
-
-	public void setHopperCode(int hopperCode) {
-		this.hopperCode = hopperCode;
 	}
 	
 }
