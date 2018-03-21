@@ -1,11 +1,13 @@
 package uk.gov.dvla.osg.common.config;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +15,6 @@ public class PostageConfiguration {
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private String filename;
 	private String ukmMAcc, ukmFAcc, ukmResourcePath, ukmItemIdLookupFile, ukmMTrayLookupFile,
 		ukmFTrayLookupFile, ukmManifestDestination, ukmManifestArchive, ukmSoapDestination,
 		ukmSoapArchive, ukmBatchTypes, ukmConsignorFileDestination, ukmConsignorDestinationDepartment;
@@ -27,10 +28,37 @@ public class PostageConfiguration {
 	
 	private HashSet<String> requiredFields = new HashSet<String>();
 	
-	public PostageConfiguration(String filename){
-		
-		this.filename=filename;
-		
+    /******************************************************************************************
+     *              SINGLETON PATTERN
+     ******************************************************************************************/
+    private static String filename;
+
+    private static class SingletonHelper {
+        private static final PostageConfiguration INSTANCE = new PostageConfiguration();
+    }
+
+    public static PostageConfiguration getInstance() {
+        if (StringUtils.isBlank(filename)) {
+            throw new RuntimeException("Postage Configuration not initialised before use");
+        }
+        return SingletonHelper.INSTANCE;
+    }
+
+    public static void init(String file) throws RuntimeException {
+        if (StringUtils.isBlank(filename)) {
+            if (new File(file).isFile()) {
+                filename = file;
+            } else {
+                throw new RuntimeException("Postage File " + filename + " does not exist on filepath.");
+            }
+        } else {
+            throw new RuntimeException("Postage Configuration has already been initialised");
+        }
+    }
+    /*****************************************************************************************/
+    
+	private PostageConfiguration(){
+			
 		loadRequiredFields();
 		
 		parseConfig(filename);
@@ -41,7 +69,7 @@ public class PostageConfiguration {
 				missingFields = missingFields + str + ",";
 			}
 			
-			LOGGER.fatal("Missing values from '{}' are '{}'", filename,missingFields);
+			LOGGER.fatal("Missing values from '{}' are '{}'", filename, missingFields);
 			System.exit(1);
 		}
 	}
@@ -80,7 +108,6 @@ public class PostageConfiguration {
 		requiredFields.add("ukm.maxTrayWeight");
 		requiredFields.add("ukm.minimumCompliance");
 		requiredFields.add("ukm.batchTypes");
-		//requiredFields.add("ukm.consignorFileDestination");
 		requiredFields.add("ukm.consignorDestinationDepartment");
 		requiredFields.add("mm.machineable");
 		requiredFields.add("mm.appName");
@@ -222,297 +249,148 @@ public class PostageConfiguration {
 		return ukmMAcc;
 	}
 
-	public void setUkmMAcc(String ukmMAcc) {
-		this.ukmMAcc = ukmMAcc;
-	}
-
 	public String getUkmFAcc() {
 		return ukmFAcc;
-	}
-
-	public void setUkmFAcc(String ukmFAcc) {
-		this.ukmFAcc = ukmFAcc;
 	}
 
 	public String getFilename() {
 		return filename;
 	}
 
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-
 	public String getUnsortedAccountNo() {
 		return unsortedAccountNo;
-	}
-
-	public void setUnsortedAccountNo(String unsortedAccountNo) {
-		this.unsortedAccountNo = unsortedAccountNo;
 	}
 
 	public String getUnsortedService() {
 		return unsortedService;
 	}
 
-	public void setUnsortedService(String unsortedService) {
-		this.unsortedService = unsortedService;
-	}
-
 	public String getUnsortedProduct() {
 		return unsortedProduct;
-	}
-
-	public void setUnsortedProduct(String unsortedProduct) {
-		this.unsortedProduct = unsortedProduct;
 	}
 
 	public String getUnsortedFormat() {
 		return unsortedFormat;
 	}
 
-	public void setUnsortedFormat(String unsortedFormat) {
-		this.unsortedFormat = unsortedFormat;
-	}
-
 	public String getOcrProduct() {
 		return ocrProduct;
-	}
-
-	public void setOcrProduct(String ocrProduct) {
-		this.ocrProduct = ocrProduct;
 	}
 
 	public String getOcrFormat() {
 		return ocrFormat;
 	}
 
-	public void setOcrFormat(String ocrFormat) {
-		this.ocrFormat = ocrFormat;
-	}
-
 	public String getMmScid() {
 		return mmScid;
-	}
-
-	public void setMmScid(String mmScid) {
-		this.mmScid = mmScid;
 	}
 
 	public String getMmClass() {
 		return mmClass;
 	}
 
-	public void setMmClass(String mmClass) {
-		this.mmClass = mmClass;
-	}
-
 	public String getMmXmlProduct() {
 		return mmXmlProduct;
-	}
-
-	public void setMmXmlProduct(String mmXmlProduct) {
-		this.mmXmlProduct = mmXmlProduct;
 	}
 
 	public String getMmXmlFormat() {
 		return mmXmlFormat;
 	}
 
-	public void setMmXmlFormat(String mmXmlFormat) {
-		this.mmXmlFormat = mmXmlFormat;
-	}
-
 	public String getMmProduct() {
 		return mmProduct;
-	}
-
-	public void setMmProduct(String mmProduct) {
-		this.mmProduct = mmProduct;
 	}
 
 	public String getMmFormat() {
 		return mmFormat;
 	}
 
-	public void setMmFormat(String mmFormat) {
-		this.mmFormat = mmFormat;
-	}
-
 	public String getMmUpuCountryId() {
 		return mmUpuCountryId;
-	}
-
-	public void setMmUpuCountryId(String mmUpuCountryId) {
-		this.mmUpuCountryId = mmUpuCountryId;
 	}
 
 	public String getMmInfoType() {
 		return mmInfoType;
 	}
 
-	public void setMmInfoType(String mmInfoType) {
-		this.mmInfoType = mmInfoType;
-	}
-
 	public String getMmVersionId() {
 		return mmVersionId;
-	}
-
-	public void setMmVersionId(String mmVersionId) {
-		this.mmVersionId = mmVersionId;
 	}
 
 	public String getMmMailType() {
 		return mmMailType;
 	}
 
-	public void setMmMailType(String mmMailType) {
-		this.mmMailType = mmMailType;
-	}
-
 	public String getMmReturnMailFlag() {
 		return mmReturnMailFlag;
-	}
-
-	public void setMmReturnMailFlag(String mmReturnMailFlag) {
-		this.mmReturnMailFlag = mmReturnMailFlag;
 	}
 
 	public String getMmReturnMailPc() {
 		return mmReturnMailPc;
 	}
 
-	public void setMmReturnMailPc(String mmReturnMailPc) {
-		this.mmReturnMailPc = mmReturnMailPc;
-	}
-
 	public String getMmReserved() {
 		return mmReserved;
-	}
-
-	public void setMmReserved(String mmReserved) {
-		this.mmReserved = mmReserved;
 	}
 
 	public String getUkmResourcePath() {
 		return ukmResourcePath;
 	}
 
-	public void setUkmResourcePath(String ukmResourcePath) {
-		this.ukmResourcePath = ukmResourcePath;
-	}
-
 	public String getUkmItemIdLookupFile() {
 		return ukmItemIdLookupFile;
-	}
-
-	public void setUkmItemIdLookupFile(String ukmItemIdLookupFile) {
-		this.ukmItemIdLookupFile = ukmItemIdLookupFile;
 	}
 
 	public String getUkmMTrayLookupFile() {
 		return ukmMTrayLookupFile;
 	}
 
-	public void setUkmMTrayLookupFile(String ukmMTrayLookupFile) {
-		this.ukmMTrayLookupFile = ukmMTrayLookupFile;
-	}
-
 	public String getUkmFTrayLookupFile() {
 		return ukmFTrayLookupFile;
-	}
-
-	public void setUkmFTrayLookupFile(String ukmFTrayLookupFile) {
-		this.ukmFTrayLookupFile = ukmFTrayLookupFile;
 	}
 
 	public String getUkmManifestDestination() {
 		return ukmManifestDestination;
 	}
 
-	public void setUkmManifestDestination(String ukmManifestDestination) {
-		this.ukmManifestDestination = ukmManifestDestination;
-	}
-
 	public String getUkmManifestArchive() {
 		return ukmManifestArchive;
-	}
-
-	public void setUkmManifestArchive(String ukmManifestArchive) {
-		this.ukmManifestArchive = ukmManifestArchive;
 	}
 
 	public String getUkmSoapDestination() {
 		return ukmSoapDestination;
 	}
 
-	public void setUkmSoapDestination(String ukmSoapDestination) {
-		this.ukmSoapDestination = ukmSoapDestination;
-	}
-
 	public String getUkmSoapArchive() {
 		return ukmSoapArchive;
-	}
-
-	public void setUkmSoapArchive(String ukmSoapArchive) {
-		this.ukmSoapArchive = ukmSoapArchive;
 	}
 
 	public String getUkmBatchTypes() {
 		return ukmBatchTypes;
 	}
 
-	public void setUkmBatchTypes(String ukmBatchTypes) {
-		this.ukmBatchTypes = ukmBatchTypes;
-	}
-
 	public int getUkmMinimumTrayVolume() {
 		return ukmMinimumTrayVolume;
-	}
-
-	public void setUkmMinimumTrayVolume(int ukmMinimumTrayVolume) {
-		this.ukmMinimumTrayVolume = ukmMinimumTrayVolume;
 	}
 
 	public int getUkmMinimumCompliance() {
 		return ukmMinimumCompliance;
 	}
 
-	public void setUkmMinimumCompliance(int ukmMinimumCompliance) {
-		this.ukmMinimumCompliance = ukmMinimumCompliance;
-	}
-
 	public String getUkmConsignorFileDestination() {
 		return ukmConsignorFileDestination;
-	}
-
-	public void setUkmConsignorFileDestination(String ukmConsignorFileDestination) {
-		this.ukmConsignorFileDestination = ukmConsignorFileDestination;
 	}
 
 	public String getUkmConsignorDestinationDepartment() {
 		return ukmConsignorDestinationDepartment;
 	}
 
-	public void setUkmConsignorDestinationDepartment(
-			String ukmConsignorDestinationDepartment) {
-		this.ukmConsignorDestinationDepartment = ukmConsignorDestinationDepartment;
-	}
-
 	public String getMmMachineable() {
 		return mmMachineable;
 	}
 
-	public void setMmMachineable(String mmMachineable) {
-		this.mmMachineable = mmMachineable;
-	}
-
 	public String getMmAppname() {
 		return mmAppname;
-	}
-
-	public void setMmAppname(String mmAppname) {
-		this.mmAppname = mmAppname;
 	}
 
 	public double getMaxTrayWeight() {
