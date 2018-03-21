@@ -5,6 +5,11 @@ public class Stationery {
 	private double thickness;
 	private double weight;
 
+	public Stationery(double thickness, double weight) {
+		this.thickness = thickness;
+		this.weight = weight;
+	}
+
 	public double getThickness() {
 		return thickness;
 	}
@@ -17,5 +22,4 @@ public class Stationery {
 	public String toString() {
 		return "Stationery [thickness=" + thickness + ", weight=" + weight + "]";
 	}
-
 }

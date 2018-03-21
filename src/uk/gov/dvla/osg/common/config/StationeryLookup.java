@@ -1,30 +1,61 @@
 package uk.gov.dvla.osg.common.config;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import uk.gov.dvla.osg.common.classes.Stationery;
+
 public class StationeryLookup {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private String filePath, ref;
-	private float thickness, weight;
-	private HashMap<String, StationeryLookup> lookup = new HashMap<String, StationeryLookup>();
+	private HashMap<String, Stationery> lookup = new HashMap<String, Stationery>();
 	
-	public StationeryLookup(String filePath){
+    /******************************************************************************************
+     *              SINGLETON PATTERN
+     ******************************************************************************************/
+    private static String filename;
+
+    private static class SingletonHelper {
+        private static final StationeryLookup INSTANCE = new StationeryLookup();
+    }
+
+    public static StationeryLookup getInstance() {
+        if (StringUtils.isBlank(filename)) {
+            throw new RuntimeException("Stationery Lookup not initialised before use");
+        }
+        return SingletonHelper.INSTANCE;
+    }
+
+    public static void init(String file) throws RuntimeException {
+        if (StringUtils.isBlank(filename)) {
+            if (new File(file).isFile()) {
+                filename = file;
+            } else {
+                throw new RuntimeException("Stationery Lookup file " + filename + " does not exist on filepath.");
+            }
+        } else {
+            throw new RuntimeException("Production Configuration has already been initialised");
+        }
+    }
+
+    /*****************************************************************************************/
+    
+	private StationeryLookup(){
 		LOGGER.info("Creating Stationery Lookup..");
-		this.filePath=filePath;
-		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 		    while ((line = br.readLine()) != null) {
 		    	String[] array = line.split(",");
 		    	if( !("REF".equals(array[0].trim())) ){
-		    		StationeryLookup ins = new StationeryLookup(filePath, array[0].trim(), Float.parseFloat(array[1].trim()),Float.parseFloat(array[2].trim()) );
-		    		lookup.put(array[0].trim(), ins);
+		    		lookup.put(array[0].trim(), new Stationery(Double.parseDouble(array[1].trim()),
+		    								Double.parseDouble(array[2].trim())));
 		    	}
 		    }
 		    br.close();
@@ -40,51 +71,8 @@ public class StationeryLookup {
 		}
 	}
 
-	public StationeryLookup(String filePath, String ref, float thickness, float weight){
-		this.filePath=filePath;
-		this.ref =ref;
-		this.thickness=thickness;
-		this.weight=weight;
-	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	public String getRef() {
-		return ref;
-	}
-
-	public void setRef(String ref) {
-		this.ref = ref;
-	}
-
-	public float getThickness() {
-		return thickness;
-	}
-
-	public void setThickness(float thickness) {
-		this.thickness = thickness;
-	}
-
-	public HashMap<String, StationeryLookup> getLookup() {
+	public HashMap<String, Stationery> getLookup() {
 		return lookup;
-	}
-
-	public void setLookup(HashMap<String, StationeryLookup> lookup) {
-		this.lookup = lookup;
-	}
-
-	public float getWeight() {
-		return weight;
-	}
-
-	public void setWeight(float weight) {
-		this.weight = weight;
 	}
 	
 }

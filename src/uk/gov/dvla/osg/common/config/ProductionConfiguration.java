@@ -74,9 +74,7 @@ public class ProductionConfiguration {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-
-    		// load a properties file
-    		
+	
         siteMap.put(FullBatchType.FLEETE, props.getProperty("site.english.fleet").toUpperCase());
         siteMap.put(FullBatchType.FLEETW, props.getProperty("site.welsh.fleet").toUpperCase());
         siteMap.put(FullBatchType.MULTIE, props.getProperty("site.english.multi").toUpperCase());
