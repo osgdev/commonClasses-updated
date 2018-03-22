@@ -8,10 +8,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import uk.gov.dvla.osg.common.classes.BatchType;
 
 public class PostageConfiguration {
 
@@ -27,7 +30,7 @@ public class PostageConfiguration {
 	private String mmScid, mmClass, mmXmlProduct, mmXmlFormat, mmProduct, mmFormat, mmUpuCountryId, mmInfoType,
 			mmVersionId, mmMailType, mmReturnMailFlag, mmReturnMailPc, mmReserved, mmMachineable, mmAppname;
 
-	private List<String> ukmBatchTypes;
+	private List<BatchType> ukmBatchTypes;
 	private HashSet<String> requiredFields = new HashSet<String>();
 
 	/******************************************************************************************
@@ -222,7 +225,10 @@ public class PostageConfiguration {
 						this.ukmMinimumCompliance = Integer.valueOf(value);
 						requiredFields.remove("ukm.minimumCompliance");
 					} else if ("ukm.batchTypes".equalsIgnoreCase(attribute)) {
-						this.ukmBatchTypes = Arrays.asList(value.split(","));
+						ukmBatchTypes = Arrays.asList(value.split(","))
+						                      .stream()
+							                  .map(s -> BatchType.valueOf(s))
+						                      .collect(Collectors.toList());
 						requiredFields.remove("ukm.batchTypes");
 					} else if ("ukm.consignorFileDestination".equalsIgnoreCase(attribute)) {
 						ukmConsignorFileDestination = value;
@@ -368,7 +374,7 @@ public class PostageConfiguration {
 		return ukmSoapArchive;
 	}
 
-	public List<String> getUkmBatchTypes() {
+	public List<BatchType> getUkmBatchTypes() {
 		return ukmBatchTypes;
 	}
 
