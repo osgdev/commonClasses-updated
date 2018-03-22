@@ -1,6 +1,6 @@
 package uk.gov.dvla.osg.common.classes;
 
-import java.util.Map;
+import static uk.gov.dvla.osg.common.classes.BatchType.*;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -8,8 +8,8 @@ public class Customer {
 
 	private static final String ENDMARKER = "X";
 
-	private String docRef, selectorRef, stationery, subBatch, fleetNo, paperSize, msc, sortField, eog, dps,
-			name1, name2, add1, add2, add3, add4, add5, postcode, insertRef, envelope, mmBarcodeContent, sot, appName,
+	private String docRef, selectorRef, stationery, subBatch, fleetNo, paperSize, msc, sortField, eog, dps, name1,
+			name2, add1, add2, add3, add4, add5, postcode, insertRef, envelope, mmBarcodeContent, sot, appName,
 			mmCustomerContent, runNo, runDate, sob = "";
 
 	private Integer sequenceInChild, batchSequence, noOfPages, totalPagesInGroup, tenDigitJid, eightDigitJid;
@@ -17,22 +17,21 @@ public class Customer {
 	Double weight, thickness;
 
 	private Integer presentationPriority, originalIndex, groupId;
-	
+
 	private BatchType batchType;
 	private Language lang;
 	private Product product;
 	private Site site;
 	private int transactionID;
-	
-	
+
 	public void setTransactionID(int id) {
 		this.transactionID = id;
 	}
-	
+
 	public int getTransactionID() {
 		return this.transactionID;
 	}
-	
+
 	public Customer(Integer originalIdx) {
 		this.originalIndex = originalIdx;
 	}
@@ -422,30 +421,15 @@ public class Customer {
 		return StringUtils.isNotBlank(sot);
 	}
 
-	public void updateBatchType(String newBatchType, Map<String, Integer> map) {
-		this.batchType = BatchType.valueOf(newBatchType);
-		this.presentationPriority = map.get(newBatchType);
-		if (newBatchType.equals("UNSORTED")) {
-			this.msc = "";
-		}
-	}
-
-	public void updateBatchType(String newBatchType, Integer priority) {
-		this.batchType = BatchType.valueOf(newBatchType);
-		this.presentationPriority = priority;
-		if (newBatchType.equals("UNSORTED")) {
-			this.msc = "";
-		}
-	}
-
 	public void updateBatchType(BatchType newBatchType, Integer priority) {
 		this.batchType = newBatchType;
 		this.presentationPriority = priority;
-		if (newBatchType.equals(BatchType.UNSORTED)) {
+		//this.presentationPriority = priority;
+		if (this.batchType.equals(UNSORTED)) {
 			this.msc = "";
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 
@@ -495,7 +479,7 @@ public class Customer {
 		} else if (!subBatch.equals(other.subBatch)) return false;
 		return true;
 	}
-	
+
 	public FullBatchType getFullBatchType() {
 		return FullBatchType.valueOf(batchType.name() + lang.name());
 	}

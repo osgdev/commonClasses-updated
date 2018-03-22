@@ -5,75 +5,78 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class PostageConfiguration {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	private String ukmMAcc, ukmFAcc, ukmResourcePath, ukmItemIdLookupFile, ukmMTrayLookupFile,
-		ukmFTrayLookupFile, ukmManifestDestination, ukmManifestArchive, ukmSoapDestination,
-		ukmSoapArchive, ukmBatchTypes, ukmConsignorFileDestination, ukmConsignorDestinationDepartment;
+
+	private String ukmMAcc, ukmFAcc, ukmResourcePath, ukmItemIdLookupFile, ukmMTrayLookupFile, ukmFTrayLookupFile,
+			ukmManifestDestination, ukmManifestArchive, ukmSoapDestination, ukmSoapArchive, ukmConsignorFileDestination,
+			ukmConsignorDestinationDepartment;
 	private int ukmMinimumTrayVolume, ukmMinimumCompliance, maxTrayWeight;
 
 	private String unsortedAccountNo, unsortedService, unsortedProduct, unsortedFormat;
 	private String ocrProduct, ocrFormat;
-	private String mmScid, mmClass, mmXmlProduct, mmXmlFormat, mmProduct, mmFormat, mmUpuCountryId,
-		mmInfoType, mmVersionId, mmMailType, mmReturnMailFlag, mmReturnMailPc, mmReserved, 
-		mmMachineable, mmAppname;
-	
+	private String mmScid, mmClass, mmXmlProduct, mmXmlFormat, mmProduct, mmFormat, mmUpuCountryId, mmInfoType,
+			mmVersionId, mmMailType, mmReturnMailFlag, mmReturnMailPc, mmReserved, mmMachineable, mmAppname;
+
+	private List<String> ukmBatchTypes;
 	private HashSet<String> requiredFields = new HashSet<String>();
-	
-    /******************************************************************************************
-     *              SINGLETON PATTERN
-     ******************************************************************************************/
-    private static String filename;
 
-    private static class SingletonHelper {
-        private static final PostageConfiguration INSTANCE = new PostageConfiguration();
-    }
+	/******************************************************************************************
+	 * SINGLETON PATTERN
+	 ******************************************************************************************/
+	private static String filename;
 
-    public static PostageConfiguration getInstance() {
-        if (StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Postage Configuration not initialised before use");
-        }
-        return SingletonHelper.INSTANCE;
-    }
+	private static class SingletonHelper {
+		private static final PostageConfiguration INSTANCE = new PostageConfiguration();
+	}
 
-    public static void init(String file) throws RuntimeException {
-        if (StringUtils.isBlank(filename)) {
-            if (new File(file).isFile()) {
-                filename = file;
-            } else {
-                throw new RuntimeException("Postage File " + filename + " does not exist on filepath.");
-            }
-        } else {
-            throw new RuntimeException("Postage Configuration has already been initialised");
-        }
-    }
-    /*****************************************************************************************/
-    
-	private PostageConfiguration(){
-			
+	public static PostageConfiguration getInstance() {
+		if (StringUtils.isBlank(filename)) {
+			throw new RuntimeException("Postage Configuration not initialised before use");
+		}
+		return SingletonHelper.INSTANCE;
+	}
+
+	public static void init(String file) throws RuntimeException {
+		if (StringUtils.isBlank(filename)) {
+			if (new File(file).isFile()) {
+				filename = file;
+			} else {
+				throw new RuntimeException("Postage File " + filename + " does not exist on filepath.");
+			}
+		} else {
+			throw new RuntimeException("Postage Configuration has already been initialised");
+		}
+	}
+
+	/*****************************************************************************************/
+
+	private PostageConfiguration() {
+
 		loadRequiredFields();
-		
+
 		parseConfig(filename);
-		
-		if( requiredFields.size() != 0 ){
+
+		if (requiredFields.size() != 0) {
 			String missingFields = "";
-			for(String str : requiredFields){
+			for (String str : requiredFields) {
 				missingFields = missingFields + str + ",";
 			}
-			
+
 			LOGGER.fatal("Missing values from '{}' are '{}'", filename, missingFields);
 			System.exit(1);
 		}
 	}
-	
+
 	private void loadRequiredFields() {
 		requiredFields.add("ukm.m.accNo");
 		requiredFields.add("ukm.f.accNo");
@@ -113,134 +116,134 @@ public class PostageConfiguration {
 		requiredFields.add("mm.appName");
 	}
 
-	private void parseConfig(String configFileName){
-		
+	private void parseConfig(String configFileName) {
+
 		try (BufferedReader br = new BufferedReader(new FileReader(configFileName))) {
 			String line;
-		    while (  ((line = br.readLine()) != null) ) {
-		    	if( !(line.startsWith("#")) ){
-		    		String[] split = line.split("=");
-			    	String attribute = split[0];
-			    	String value = split[1];
-			    	if( "ukm.m.accNo".equalsIgnoreCase(attribute) ){
-			    		this.ukmMAcc=value;
-			    		requiredFields.remove("ukm.m.accNo");
-			    	} else if( "ukm.f.accNo".equalsIgnoreCase(attribute) ){
-			    		this.ukmFAcc=value;
-			    		requiredFields.remove("ukm.f.accNo");
-			    	} else if( "unsort.accNo".equalsIgnoreCase(attribute) ){
-			    		this.unsortedAccountNo=value;
-			    		requiredFields.remove("unsort.accNo");
-			    	} else if( "unsort.service".equalsIgnoreCase(attribute) ){
-			    		this.unsortedService=value;
-			    		requiredFields.remove("unsort.service");
-			    	} else if( "unsort.product".equalsIgnoreCase(attribute) ){
-			    		this.unsortedProduct=value;
-			    		requiredFields.remove("unsort.product");
-			    	} else if( "unsort.format".equalsIgnoreCase(attribute) ){
-			    		this.unsortedFormat=value;
-			    		requiredFields.remove("unsort.format");
-			    	} else if( "ocr.product".equalsIgnoreCase(attribute) ){
-			    		this.ocrProduct=value;
-			    		requiredFields.remove("ocr.product");
-			    	} else if( "ocr.format".equalsIgnoreCase(attribute) ){
-			    		this.ocrFormat=value;
-			    		requiredFields.remove("ocr.format");
-			    	} else if( "mm.scid".equalsIgnoreCase(attribute) ){
-			    		this.mmScid=value;
-			    		requiredFields.remove("mm.scid");
-			    	} else if( "mm.class".equalsIgnoreCase(attribute) ){
-			    		this.mmClass=value;
-			    		requiredFields.remove("mm.class");
-			    	} else if( "mm.xmlProduct".equalsIgnoreCase(attribute) ){
-			    		this.mmXmlProduct=value;
-			    		requiredFields.remove("mm.xmlProduct");
-			    	} else if( "mm.xmlFormat".equalsIgnoreCase(attribute) ){
-			    		this.mmXmlFormat=value;
-			    		requiredFields.remove("mm.xmlFormat");
-			    	} else if( "mm.product".equalsIgnoreCase(attribute) ){
-			    		this.mmProduct=value;
-			    		requiredFields.remove("mm.product");
-			    	} else if( "mm.format".equalsIgnoreCase(attribute) ){
-			    		this.mmFormat=value;
-			    		requiredFields.remove("mm.format");
-			    	} else if( "mm.upuCountryId".equalsIgnoreCase(attribute) ){
-			    		this.mmUpuCountryId=value;
-			    		requiredFields.remove("mm.upuCountryId");
-			    	} else if( "mm.infoType".equalsIgnoreCase(attribute) ){
-			    		this.mmInfoType=value;
-			    		requiredFields.remove("mm.infoType");
-			    	} else if( "mm.versionId".equalsIgnoreCase(attribute) ){
-			    		this.mmVersionId=value;
-			    		requiredFields.remove("mm.versionId");
-			    	} else if( "mm.mailType".equalsIgnoreCase(attribute) ){
-			    		this.mmMailType=value;
-			    		requiredFields.remove("mm.mailType");
-			    	} else if( "mm.returnMailFlag".equalsIgnoreCase(attribute) ){
-			    		this.mmReturnMailFlag=value;
-			    		requiredFields.remove("mm.returnMailFlag");
-			    	} else if( "mm.returnMailPc".equalsIgnoreCase(attribute) ){
-			    		this.mmReturnMailPc=value;
-			    		requiredFields.remove("mm.returnMailPc");
-			    	} else if( "mm.reserved".equalsIgnoreCase(attribute) ){
-			    		this.mmReserved=value;
-			    		requiredFields.remove("mm.reserved");
-			    	} else if( "ukm.resourcePath".equalsIgnoreCase(attribute) ){
-			    		this.ukmResourcePath=value;
-			    		requiredFields.remove("ukm.resourcePath");
-			    	} else if( "ukm.itemIDLookupFilename".equalsIgnoreCase(attribute) ){
-			    		this.ukmItemIdLookupFile=value;
-			    		requiredFields.remove("ukm.itemIDLookupFilename");
-			    	} else if( "ukm.m.trayLookupFilename".equalsIgnoreCase(attribute) ){
-			    		this.ukmMTrayLookupFile=value;
-			    		requiredFields.remove("ukm.m.trayLookupFilename");
-			    	} else if( "ukm.f.trayLookupFilename".equalsIgnoreCase(attribute) ){
-			    		this.ukmFTrayLookupFile=value;
-			    		requiredFields.remove("ukm.f.trayLookupFilename");
-			    	} else if( "ukm.manifest.DestinationPath".equalsIgnoreCase(attribute) ){
-			    		this.ukmManifestDestination=value;
-			    		requiredFields.remove("ukm.manifest.DestinationPath");
-			    	} else if( "ukm.manifest.ArchivePath".equalsIgnoreCase(attribute) ){
-			    		this.ukmManifestArchive=value;
-			    		requiredFields.remove("ukm.manifest.ArchivePath");
-			    	} else if( "ukm.soapfile.DestinationPath".equalsIgnoreCase(attribute) ){
-			    		this.ukmSoapDestination=value;
-			    		requiredFields.remove("ukm.soapfile.DestinationPath");
-			    	} else if( "ukm.soapfile.ArchivePath".equalsIgnoreCase(attribute) ){
-			    		this.ukmSoapArchive=value;
-			    		requiredFields.remove("ukm.soapfile.ArchivePath");
-			    	} else if( "ukm.minimumTrayVolume".equalsIgnoreCase(attribute) ){
-			    		this.ukmMinimumTrayVolume=Integer.valueOf(value);
-			    		requiredFields.remove("ukm.minimumTrayVolume");
-			    	} else if( "ukm.maxTrayWeight".equalsIgnoreCase(attribute) ){
-			    		this.maxTrayWeight=Integer.valueOf(value);
-			    		requiredFields.remove("ukm.maxTrayWeight");
-			    	} else if( "ukm.minimumCompliance".equalsIgnoreCase(attribute) ){
-			    		this.ukmMinimumCompliance=Integer.valueOf(value);
-			    		requiredFields.remove("ukm.minimumCompliance");
-			    	} else if( "ukm.batchTypes".equalsIgnoreCase(attribute) ){
-			    		this.ukmBatchTypes=value;
-			    		requiredFields.remove("ukm.batchTypes");
-			    	} else if( "ukm.consignorFileDestination".equalsIgnoreCase(attribute) ){
-			    		ukmConsignorFileDestination=value;
-			    		requiredFields.remove("ukm.consignorFileDestination");
-			    	} else if( "ukm.consignorDestinationDepartment".equalsIgnoreCase(attribute) ){
-			    		ukmConsignorDestinationDepartment=value;
-			    		requiredFields.remove("ukm.consignorDestinationDepartment");
-			    	} else if( "mm.machineable".equalsIgnoreCase(attribute) ){
-			    		mmMachineable=value;
-			    		requiredFields.remove("mm.machineable");
-			    	} else if( "mm.appName".equalsIgnoreCase(attribute) ){
-			    		mmAppname=value;
-			    		requiredFields.remove("mm.appName");
-			    	}
-		    	}
-		    }
+			while (((line = br.readLine()) != null)) {
+				if (!(line.startsWith("#"))) {
+					String[] split = line.split("=");
+					String attribute = split[0];
+					String value = split[1];
+					if ("ukm.m.accNo".equalsIgnoreCase(attribute)) {
+						this.ukmMAcc = value;
+						requiredFields.remove("ukm.m.accNo");
+					} else if ("ukm.f.accNo".equalsIgnoreCase(attribute)) {
+						this.ukmFAcc = value;
+						requiredFields.remove("ukm.f.accNo");
+					} else if ("unsort.accNo".equalsIgnoreCase(attribute)) {
+						this.unsortedAccountNo = value;
+						requiredFields.remove("unsort.accNo");
+					} else if ("unsort.service".equalsIgnoreCase(attribute)) {
+						this.unsortedService = value;
+						requiredFields.remove("unsort.service");
+					} else if ("unsort.product".equalsIgnoreCase(attribute)) {
+						this.unsortedProduct = value;
+						requiredFields.remove("unsort.product");
+					} else if ("unsort.format".equalsIgnoreCase(attribute)) {
+						this.unsortedFormat = value;
+						requiredFields.remove("unsort.format");
+					} else if ("ocr.product".equalsIgnoreCase(attribute)) {
+						this.ocrProduct = value;
+						requiredFields.remove("ocr.product");
+					} else if ("ocr.format".equalsIgnoreCase(attribute)) {
+						this.ocrFormat = value;
+						requiredFields.remove("ocr.format");
+					} else if ("mm.scid".equalsIgnoreCase(attribute)) {
+						this.mmScid = value;
+						requiredFields.remove("mm.scid");
+					} else if ("mm.class".equalsIgnoreCase(attribute)) {
+						this.mmClass = value;
+						requiredFields.remove("mm.class");
+					} else if ("mm.xmlProduct".equalsIgnoreCase(attribute)) {
+						this.mmXmlProduct = value;
+						requiredFields.remove("mm.xmlProduct");
+					} else if ("mm.xmlFormat".equalsIgnoreCase(attribute)) {
+						this.mmXmlFormat = value;
+						requiredFields.remove("mm.xmlFormat");
+					} else if ("mm.product".equalsIgnoreCase(attribute)) {
+						this.mmProduct = value;
+						requiredFields.remove("mm.product");
+					} else if ("mm.format".equalsIgnoreCase(attribute)) {
+						this.mmFormat = value;
+						requiredFields.remove("mm.format");
+					} else if ("mm.upuCountryId".equalsIgnoreCase(attribute)) {
+						this.mmUpuCountryId = value;
+						requiredFields.remove("mm.upuCountryId");
+					} else if ("mm.infoType".equalsIgnoreCase(attribute)) {
+						this.mmInfoType = value;
+						requiredFields.remove("mm.infoType");
+					} else if ("mm.versionId".equalsIgnoreCase(attribute)) {
+						this.mmVersionId = value;
+						requiredFields.remove("mm.versionId");
+					} else if ("mm.mailType".equalsIgnoreCase(attribute)) {
+						this.mmMailType = value;
+						requiredFields.remove("mm.mailType");
+					} else if ("mm.returnMailFlag".equalsIgnoreCase(attribute)) {
+						this.mmReturnMailFlag = value;
+						requiredFields.remove("mm.returnMailFlag");
+					} else if ("mm.returnMailPc".equalsIgnoreCase(attribute)) {
+						this.mmReturnMailPc = value;
+						requiredFields.remove("mm.returnMailPc");
+					} else if ("mm.reserved".equalsIgnoreCase(attribute)) {
+						this.mmReserved = value;
+						requiredFields.remove("mm.reserved");
+					} else if ("ukm.resourcePath".equalsIgnoreCase(attribute)) {
+						this.ukmResourcePath = value;
+						requiredFields.remove("ukm.resourcePath");
+					} else if ("ukm.itemIDLookupFilename".equalsIgnoreCase(attribute)) {
+						this.ukmItemIdLookupFile = value;
+						requiredFields.remove("ukm.itemIDLookupFilename");
+					} else if ("ukm.m.trayLookupFilename".equalsIgnoreCase(attribute)) {
+						this.ukmMTrayLookupFile = value;
+						requiredFields.remove("ukm.m.trayLookupFilename");
+					} else if ("ukm.f.trayLookupFilename".equalsIgnoreCase(attribute)) {
+						this.ukmFTrayLookupFile = value;
+						requiredFields.remove("ukm.f.trayLookupFilename");
+					} else if ("ukm.manifest.DestinationPath".equalsIgnoreCase(attribute)) {
+						this.ukmManifestDestination = value;
+						requiredFields.remove("ukm.manifest.DestinationPath");
+					} else if ("ukm.manifest.ArchivePath".equalsIgnoreCase(attribute)) {
+						this.ukmManifestArchive = value;
+						requiredFields.remove("ukm.manifest.ArchivePath");
+					} else if ("ukm.soapfile.DestinationPath".equalsIgnoreCase(attribute)) {
+						this.ukmSoapDestination = value;
+						requiredFields.remove("ukm.soapfile.DestinationPath");
+					} else if ("ukm.soapfile.ArchivePath".equalsIgnoreCase(attribute)) {
+						this.ukmSoapArchive = value;
+						requiredFields.remove("ukm.soapfile.ArchivePath");
+					} else if ("ukm.minimumTrayVolume".equalsIgnoreCase(attribute)) {
+						this.ukmMinimumTrayVolume = Integer.valueOf(value);
+						requiredFields.remove("ukm.minimumTrayVolume");
+					} else if ("ukm.maxTrayWeight".equalsIgnoreCase(attribute)) {
+						this.maxTrayWeight = Integer.valueOf(value);
+						requiredFields.remove("ukm.maxTrayWeight");
+					} else if ("ukm.minimumCompliance".equalsIgnoreCase(attribute)) {
+						this.ukmMinimumCompliance = Integer.valueOf(value);
+						requiredFields.remove("ukm.minimumCompliance");
+					} else if ("ukm.batchTypes".equalsIgnoreCase(attribute)) {
+						this.ukmBatchTypes = Arrays.asList(value.split(","));
+						requiredFields.remove("ukm.batchTypes");
+					} else if ("ukm.consignorFileDestination".equalsIgnoreCase(attribute)) {
+						ukmConsignorFileDestination = value;
+						requiredFields.remove("ukm.consignorFileDestination");
+					} else if ("ukm.consignorDestinationDepartment".equalsIgnoreCase(attribute)) {
+						ukmConsignorDestinationDepartment = value;
+						requiredFields.remove("ukm.consignorDestinationDepartment");
+					} else if ("mm.machineable".equalsIgnoreCase(attribute)) {
+						mmMachineable = value;
+						requiredFields.remove("mm.machineable");
+					} else if ("mm.appName".equalsIgnoreCase(attribute)) {
+						mmAppname = value;
+						requiredFields.remove("mm.appName");
+					}
+				}
+			}
 		} catch (FileNotFoundException e) {
-			LOGGER.fatal("Lookup file error: '{}'",e.getMessage());
+			LOGGER.fatal("Lookup file error: '{}'", e.getMessage());
 			System.exit(1);
 		} catch (IOException e) {
-			LOGGER.fatal("Lookup file error: '{}'",e.getMessage());
+			LOGGER.fatal("Lookup file error: '{}'", e.getMessage());
 			System.exit(1);
 		}
 	}
@@ -365,7 +368,7 @@ public class PostageConfiguration {
 		return ukmSoapArchive;
 	}
 
-	public String getUkmBatchTypes() {
+	public List<String> getUkmBatchTypes() {
 		return ukmBatchTypes;
 	}
 
@@ -396,6 +399,5 @@ public class PostageConfiguration {
 	public double getMaxTrayWeight() {
 		return maxTrayWeight;
 	}
-	
-	
+
 }
