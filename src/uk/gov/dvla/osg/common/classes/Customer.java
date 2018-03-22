@@ -14,7 +14,7 @@ public class Customer {
 
 	private Integer sequenceInChild, batchSequence, noOfPages, totalPagesInGroup, tenDigitJid, eightDigitJid;
 
-	Double weight, thickness;
+	Double weight, size;
 
 	private Integer presentationPriority, originalIndex, groupId;
 
@@ -385,12 +385,12 @@ public class Customer {
 		this.weight = weight;
 	}
 
-	public Double getThickness() {
-		return thickness;
+	public Double getSize() {
+		return size;
 	}
 
-	public void setThickness(Double size) {
-		this.thickness = size;
+	public void setSize(Double size) {
+		this.size = size;
 	}
 
 	public String getMmBarcodeContent() {
