@@ -22,7 +22,7 @@ public class ProductionConfiguration {
     private Product mailsortProduct;
     // Envelopes
     private String envelopeType, envelopeEnglishUnsorted, envelopeWelshUnsorted, envelopeEnglishOcr,
-            envelopeWelshOcr, envelopeEnglishMm, envelopeWelshMm;
+            envelopeWelshOcr, envelopeEnglishMm, envelopeWelshMm, envelopeEnglishUncoded, envelopeWelshUncoded;
     
     private Integer traySize, maxMulti, minimumMailsort;
     // Map batch values to enum
@@ -91,7 +91,9 @@ public class ProductionConfiguration {
         siteMap.put(FullBatchType.REJECTW, props.getProperty("site.welsh.reject").toUpperCase());
         siteMap.put(FullBatchType.REPRINTE, props.getProperty("site.english.reprint").toUpperCase());
         siteMap.put(FullBatchType.REPRINTW, props.getProperty("site.welsh.reprint").toUpperCase());
-
+        siteMap.put(FullBatchType.UNCODEDE, props.getProperty("site.english.uncoded").toUpperCase());
+        siteMap.put(FullBatchType.UNCODEDW, props.getProperty("site.welsh.uncoded").toUpperCase());
+        
         this.mailingSite = props.getProperty("site.mailing").toUpperCase();
         this.mailsortProduct = Product.valueOf(props.getProperty("mailsort.preference.product").toUpperCase());
         this.envelopeType = props.getProperty("envelopeType").toUpperCase();
@@ -101,6 +103,9 @@ public class ProductionConfiguration {
         this.envelopeWelshOcr = props.getProperty("envelope.welsh.ocr").toUpperCase();
         this.envelopeEnglishMm = props.getProperty("envelope.english.mm").toUpperCase();
         this.envelopeWelshMm = props.getProperty("envelope.welsh.mm").toUpperCase();
+        this.envelopeEnglishUncoded = props.getProperty("envelope.english.uncoded").toUpperCase();
+        this.envelopeWelshUncoded = props.getProperty("envelope.welsh.uncoded").toUpperCase();
+        
         this.minimumMailsort = Integer.parseInt(props.getProperty("minimum.mailsort"));
         this.maxMulti = Integer.parseInt(props.getProperty("maxMulti"));
         this.traySize = Integer.parseInt(props.getProperty("traySize"));
@@ -122,6 +127,9 @@ public class ProductionConfiguration {
         batchMaxMap.put(FullBatchType.REJECTW, Integer.parseInt(props.getProperty("batchMax.welsh.reject")));
         batchMaxMap.put(FullBatchType.REPRINTE, Integer.parseInt(props.getProperty("batchMax.english.reprint")));
         batchMaxMap.put(FullBatchType.REPRINTW, Integer.parseInt(props.getProperty("batchMax.welsh.reprint")));
+        batchMaxMap.put(FullBatchType.UNCODEDE, Integer.parseInt(props.getProperty("batchMax.english.uncoded")));
+        batchMaxMap.put(FullBatchType.UNCODEDW, Integer.parseInt(props.getProperty("batchMax.welsh.uncoded")));
+        
         // Group Max
         groupMaxMap.put(FullBatchType.FLEETE, Integer.parseInt(props.getProperty("groupMax.english.fleet")));
         groupMaxMap.put(FullBatchType.FLEETW, Integer.parseInt(props.getProperty("groupMax.welsh.fleet")));
@@ -196,4 +204,12 @@ public class ProductionConfiguration {
     public String getSite(FullBatchType fbt) {
         return siteMap.get(fbt);
     }
+
+	public String getEnvelopeEnglishUncoded() {
+		return envelopeEnglishUncoded;
+	}
+
+	public String getEnvelopeWelshUncoded() {
+		return envelopeWelshUncoded;
+	}
 }
