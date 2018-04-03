@@ -21,8 +21,8 @@ public class PostageConfiguration {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	private String ukmMAcc, ukmFAcc, ukmResourcePath, ukmItemIdLookupFile, ukmMTrayLookupFile, ukmFTrayLookupFile,
-			ukmManifestDestination, ukmManifestArchive, ukmSoapDestination, ukmSoapArchive, ukmConsignorFileDestination,
-			ukmConsignorDestinationDepartment;
+			ukmSoapDestination, ukmSoapArchive, ukmConsignorFileDestination,
+			ukmConsignorFileArchive, ukmConsignorDestinationDepartment;
 	private int ukmMinimumTrayVolume, ukmMinimumCompliance, maxTrayWeight;
 
 	private String unsortedAccountNo, unsortedService, unsortedProduct, unsortedFormat;
@@ -106,8 +106,8 @@ public class PostageConfiguration {
 		requiredFields.add("ukm.itemIDLookupFilename");
 		requiredFields.add("ukm.m.trayLookupFilename");
 		requiredFields.add("ukm.f.trayLookupFilename");
-		requiredFields.add("ukm.manifest.DestinationPath");
-		requiredFields.add("ukm.manifest.ArchivePath");
+		requiredFields.add("ukm.consignorFileDestination");
+		requiredFields.add("ukm.consignorFileArchivePath");
 		requiredFields.add("ukm.soapfile.DestinationPath");
 		requiredFields.add("ukm.soapfile.ArchivePath");
 		requiredFields.add("ukm.minimumTrayVolume");
@@ -203,12 +203,12 @@ public class PostageConfiguration {
 					} else if ("ukm.f.trayLookupFilename".equalsIgnoreCase(attribute)) {
 						this.ukmFTrayLookupFile = value;
 						requiredFields.remove("ukm.f.trayLookupFilename");
-					} else if ("ukm.manifest.DestinationPath".equalsIgnoreCase(attribute)) {
-						this.ukmManifestDestination = value;
-						requiredFields.remove("ukm.manifest.DestinationPath");
-					} else if ("ukm.manifest.ArchivePath".equalsIgnoreCase(attribute)) {
-						this.ukmManifestArchive = value;
-						requiredFields.remove("ukm.manifest.ArchivePath");
+					} else if ("ukm.consignorFileDestination".equalsIgnoreCase(attribute)) {
+						this.ukmConsignorFileDestination = value;
+						requiredFields.remove("ukm.consignorFileDestination");
+					} else if ("ukm.consignorFileArchivePath".equalsIgnoreCase(attribute)) {
+						this.ukmConsignorFileArchive = value;
+						requiredFields.remove("ukm.consignorFileArchivePath");
 					} else if ("ukm.soapfile.DestinationPath".equalsIgnoreCase(attribute)) {
 						this.ukmSoapDestination = value;
 						requiredFields.remove("ukm.soapfile.DestinationPath");
@@ -230,9 +230,6 @@ public class PostageConfiguration {
 							                  .map(s -> BatchType.valueOf(s))
 						                      .collect(Collectors.toList());
 						requiredFields.remove("ukm.batchTypes");
-					} else if ("ukm.consignorFileDestination".equalsIgnoreCase(attribute)) {
-						ukmConsignorFileDestination = value;
-						requiredFields.remove("ukm.consignorFileDestination");
 					} else if ("ukm.consignorDestinationDepartment".equalsIgnoreCase(attribute)) {
 						ukmConsignorDestinationDepartment = value;
 						requiredFields.remove("ukm.consignorDestinationDepartment");
@@ -254,6 +251,10 @@ public class PostageConfiguration {
 		}
 	}
 
+	public String getUkmConsignorFileArchive() {
+		return ukmConsignorFileArchive;
+	}
+	
 	public String getUkmMAcc() {
 		return ukmMAcc;
 	}
@@ -356,14 +357,6 @@ public class PostageConfiguration {
 
 	public String getUkmFTrayLookupFile() {
 		return ukmFTrayLookupFile;
-	}
-
-	public String getUkmManifestDestination() {
-		return ukmManifestDestination;
-	}
-
-	public String getUkmManifestArchive() {
-		return ukmManifestArchive;
 	}
 
 	public String getUkmSoapDestination() {
