@@ -21,7 +21,7 @@ public class ProductionConfiguration {
     private String mailingSite;
     private Product mailsortProduct;
     // Envelopes
-    private String envelopeType, envelopeEnglishUnsorted, envelopeWelshUnsorted, envelopeEnglishOcr,
+    private String envelopeEnglishDefault, envelopeWelshDefault, envelopeEnglishUnsorted, envelopeWelshUnsorted, envelopeEnglishOcr,
             envelopeWelshOcr, envelopeEnglishMm, envelopeWelshMm, envelopeEnglishUncoded, envelopeWelshUncoded;
     
     private Integer traySize, maxMulti, minimumMailsort;
@@ -96,13 +96,20 @@ public class ProductionConfiguration {
         
         this.mailingSite = props.getProperty("site.mailing").toUpperCase();
         this.mailsortProduct = Product.valueOf(props.getProperty("mailsort.preference.product").toUpperCase());
-        this.envelopeType = props.getProperty("envelopeType").toUpperCase();
+ 
+        // English And Welsh Default Envelopes, MP - 04/04
+        this.envelopeEnglishDefault = props.getProperty("envelope.english.default").toUpperCase();
+        this.envelopeWelshDefault = props.getProperty("envelope.welsh.default").toUpperCase();
+        
         this.envelopeEnglishUnsorted = props.getProperty("envelope.english.unsorted").toUpperCase();
         this.envelopeWelshUnsorted = props.getProperty("envelope.welsh.unsorted").toUpperCase();
+        
         this.envelopeEnglishOcr = props.getProperty("envelope.english.ocr").toUpperCase();
         this.envelopeWelshOcr = props.getProperty("envelope.welsh.ocr").toUpperCase();
+        
         this.envelopeEnglishMm = props.getProperty("envelope.english.mm").toUpperCase();
         this.envelopeWelshMm = props.getProperty("envelope.welsh.mm").toUpperCase();
+        
         this.envelopeEnglishUncoded = props.getProperty("envelope.english.uncoded").toUpperCase();
         this.envelopeWelshUncoded = props.getProperty("envelope.welsh.uncoded").toUpperCase();
         
@@ -146,10 +153,6 @@ public class ProductionConfiguration {
 
     public Product getMailsortProduct() {
         return mailsortProduct;
-    }
-
-    public String getEnvelopeType() {
-        return envelopeType;
     }
 
     public String getEnvelopeEnglishUnsorted() {
@@ -211,5 +214,13 @@ public class ProductionConfiguration {
 
 	public String getEnvelopeWelshUncoded() {
 		return envelopeWelshUncoded;
+	}
+
+	public String getEnvelopeWelshDefault() {
+		return envelopeWelshDefault;
+	}
+
+	public String getEnvelopeEnglishDefault() {
+		return envelopeEnglishDefault;
 	}
 }
