@@ -54,7 +54,7 @@ public class EnvelopeLookup {
 			while ((line = br.readLine()) != null) {
 				String[] array = line.split(",");
 				if (!("REF".equals(array[0].trim()))) {
-					lookup.put(array[0].trim(), new Envelope(Double.parseDouble(array[1].trim()),
+					lookup.put(array[0].trim().toUpperCase(), new Envelope(Double.parseDouble(array[1].trim()),
 							Integer.parseInt(array[2].trim()), Double.parseDouble(array[3].trim())));
 				}
 			}

@@ -4,7 +4,7 @@ public enum Product {
 	MM ("MAILMARK"),
 	OCR ("OCR"),
 	UNSORTED ("UNSORTED"),
-	RM ("RM");
+	UNCODED ("UNCODED");
 	
 	private String product;
 	
