@@ -18,35 +18,36 @@ public class EnvelopeLookup {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private HashMap<String, Envelope> lookup = new HashMap<>();
 
-  /******************************************************************************************
-  *              SINGLETON PATTERN
-  ******************************************************************************************/
- private static String filename;
+	/******************************************************************************************
+	 *                               SINGLETON PATTERN
+	 ******************************************************************************************/
+	private static String filename;
 
- private static class SingletonHelper {
-     private static final EnvelopeLookup INSTANCE = new EnvelopeLookup();
- }
+	private static class SingletonHelper {
+		private static final EnvelopeLookup INSTANCE = new EnvelopeLookup();
+	}
 
- public static EnvelopeLookup getInstance() {
-     if (StringUtils.isBlank(filename)) {
-         throw new RuntimeException("Envelope Lookup not initialised before use");
-     }
-     return SingletonHelper.INSTANCE;
- }
+	public static EnvelopeLookup getInstance() {
+		if (StringUtils.isBlank(filename)) {
+			throw new RuntimeException("Envelope Lookup not initialised before use");
+		}
+		return SingletonHelper.INSTANCE;
+	}
 
- public static void init(String file) throws RuntimeException {
-     if (StringUtils.isBlank(filename)) {
-         if (new File(file).isFile()) {
-             filename = file;
-         } else {
-             throw new RuntimeException("Envelope Lookup File " + filename + " does not exist on filepath.");
-         }
-     } else {
-         throw new RuntimeException("Envelope Lookup has already been initialised");
-     }
- }
- /*****************************************************************************************/
- 
+	public static void init(String file) throws RuntimeException {
+		if (StringUtils.isBlank(filename)) {
+			if (new File(file).isFile()) {
+				filename = file;
+			} else {
+				throw new RuntimeException("Envelope Lookup File " + filename + " does not exist on filepath.");
+			}
+		} else {
+			throw new RuntimeException("Envelope Lookup has already been initialised");
+		}
+	}
+
+	/*****************************************************************************************/
+
 	private EnvelopeLookup() {
 		LOGGER.info("Creating Envelope Lookup..");
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -74,4 +75,7 @@ public class EnvelopeLookup {
 		return lookup;
 	}
 
+	public Envelope get(String id) {
+		return lookup.get(id);
+	}
 }

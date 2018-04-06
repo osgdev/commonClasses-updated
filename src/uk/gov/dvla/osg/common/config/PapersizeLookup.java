@@ -2,7 +2,6 @@ package uk.gov.dvla.osg.common.config;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,7 +31,7 @@ public class PapersizeLookup {
         }
         return SingletonHelper.INSTANCE;
     }
-
+	
     public static void init(String file) throws RuntimeException {
         if (StringUtils.isBlank(filename)) {
             if (new File(file).isFile()) {
@@ -56,13 +55,7 @@ public class PapersizeLookup {
 		    		lookup.put(array[0].trim(), new PaperSize(Double.parseDouble(array[1].trim())));
 		    	}
 		    }
-		} catch (FileNotFoundException e) {
-			LOGGER.fatal("PapersizeLookup lookup file error: '{}'", e.getMessage());
-			System.exit(1);
-		} catch (IOException e) {
-			LOGGER.fatal("PapersizeLookup lookup file error: '{}'", e.getMessage());
-			System.exit(1);
-		} catch (NullPointerException e){
+		} catch (IndexOutOfBoundsException | IOException | NullPointerException e) {
 			LOGGER.fatal("PapersizeLookup lookup file error: '{}'", e.getMessage());
 			System.exit(1);
 		}
@@ -71,5 +64,15 @@ public class PapersizeLookup {
 	public HashMap<String, PaperSize> getLookup() {
 		return lookup;
 	}
-
+	
+	public PaperSize get(String id) {
+        if (StringUtils.isBlank(filename)) {
+            throw new RuntimeException("Papersize Lookup not initialised before use");
+        }
+        return lookup.get(id);
+	}
+	
+	public boolean containsKey(String key) {
+		return lookup.containsKey(key);
+	}
 }

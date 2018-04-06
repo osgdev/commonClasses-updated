@@ -2,7 +2,6 @@ package uk.gov.dvla.osg.common.config;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,7 +31,7 @@ public class StationeryLookup {
         }
         return SingletonHelper.INSTANCE;
     }
-
+    
     public static void init(String file) throws RuntimeException {
         if (StringUtils.isBlank(filename)) {
             if (new File(file).isFile()) {
@@ -59,14 +58,8 @@ public class StationeryLookup {
 		    	}
 		    }
 		    br.close();
-		} catch (FileNotFoundException e) {
-			LOGGER.fatal("Stationery lookup file error: '{}'",e.getMessage());
-			System.exit(1);
-		} catch (IOException e) {
-			LOGGER.fatal("Stationery lookup file error: '{}'",e.getMessage());
-			System.exit(1);
-		} catch (NullPointerException e){
-			LOGGER.fatal("Stationery lookup file error: '{}'",e.getMessage());
+		} catch (IndexOutOfBoundsException | IOException | NullPointerException e) {
+			LOGGER.fatal("Stationery lookup file error: '{}'", e.getMessage());
 			System.exit(1);
 		}
 	}
@@ -74,5 +67,8 @@ public class StationeryLookup {
 	public HashMap<String, Stationery> getLookup() {
 		return lookup;
 	}
-	
+
+    public Stationery get(String id) {
+        return lookup.get(id);
+    }
 }

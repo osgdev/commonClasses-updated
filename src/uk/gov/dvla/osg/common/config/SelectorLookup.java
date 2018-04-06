@@ -2,7 +2,6 @@ package uk.gov.dvla.osg.common.config;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,7 +31,7 @@ public class SelectorLookup {
 		}
 		return SingletonHelper.INSTANCE;
 	}
-
+	
 	public static void init(String file) throws RuntimeException {
 		if (StringUtils.isBlank(filename)) {
 			if (new File(file).isFile()) {
@@ -58,19 +57,17 @@ public class SelectorLookup {
 					lookup.put(array[0].trim(), new Selector(array[1].trim(), array[2].trim(), array[3].trim()));
 				}
 			}
-		} catch (FileNotFoundException e) {
-			LOGGER.fatal("Lookup file error: '{}'", e.getMessage());
-			System.exit(1);
-		} catch (IOException e) {
-			LOGGER.fatal("Lookup file error: '{}'", e.getMessage());
-			System.exit(1);
-		} catch (NullPointerException e) {
-			LOGGER.fatal("Lookup file error: '{}'", e.getMessage());
+		} catch (IndexOutOfBoundsException | IOException | NullPointerException e) {
+			LOGGER.fatal("Lookup file error: {}", e.getMessage());
 			System.exit(1);
 		}
 	}
 
 	public HashMap<String, Selector> getLookup() {
 		return this.lookup;
+	}
+
+	public Selector get(String selector) {
+		return lookup.get(selector);
 	}
 }
