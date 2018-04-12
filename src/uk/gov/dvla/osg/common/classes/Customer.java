@@ -10,7 +10,7 @@ public class Customer {
 
 	private String docRef, selectorRef, stationery, subBatch, fleetNo, paperSize, msc, sortField, eog, dps, name1,
 			name2, add1, add2, add3, add4, add5, postcode, insertRef, envelope, mmBarcodeContent, sot, appName,
-			mmCustomerContent, runNo, runDate, sob = "";
+			mmCustomerContent, runNo, runDate, mailingId, sob = "";
 
 	private Integer sequenceInChild, batchSequence, noOfPages, totalPagesInGroup, tenDigitJid, eightDigitJid;
 
@@ -24,6 +24,14 @@ public class Customer {
 	private Site site;
 	private int transactionID;
 
+	public void setMailingId(String id) {
+		this.mailingId = id;
+	}
+	
+	public String getMailingId() {
+		return this.mailingId;
+	}
+	
 	public void setTransactionID(int id) {
 		this.transactionID = id;
 	}
