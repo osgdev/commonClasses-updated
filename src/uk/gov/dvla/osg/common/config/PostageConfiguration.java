@@ -64,7 +64,7 @@ public class PostageConfiguration {
 	/*****************************************************************************************/
 
 	private PostageConfiguration() {
-
+	    LOGGER.info("Creating Envelope Lookup.. {}", filename);
 		loadRequiredFields();
 
 		parseConfig(filename);
@@ -227,7 +227,7 @@ public class PostageConfiguration {
 					} else if ("ukm.batchTypes".equalsIgnoreCase(attribute)) {
 						ukmBatchTypes = Arrays.asList(value.split(","))
 						                      .stream()
-							                  .map(s -> BatchType.valueOf(s))
+							                  .map(s -> BatchType.valueOf(s.trim()))
 						                      .collect(Collectors.toList());
 						requiredFields.remove("ukm.batchTypes");
 					} else if ("ukm.consignorDestinationDepartment".equalsIgnoreCase(attribute)) {
