@@ -434,19 +434,11 @@ public class Customer {
 		this.presentationPriority = priority;
 		//this.presentationPriority = priority;
 		if (this.batchType.equals(UNSORTED)) {
-			this.msc = "";
+			this.msc = "99999";
 		}
 	}
 
-	@Override
-	public String toString() {
 
-		String str = docRef + "," + lang + "," + batchSequence + "," + sequenceInChild + "," + msc + "," + batchType
-				+ "," + subBatch + "," + site + "," + eog + "," + sot;
-
-		return str;
-
-	}
 
 	@Override
 	public int hashCode() {
@@ -492,7 +484,11 @@ public class Customer {
 		return FullBatchType.valueOf(batchType.name() + lang.name());
 	}
 
-	public String getRunNo() {
+   public String getFullBatchName() {
+        return batchType.name() + lang.name();
+    }
+	
+   public String getRunNo() {
 		return runNo;
 	}
 
@@ -511,5 +507,47 @@ public class Customer {
 	public void setRunDate(String runDate) {
 		this.runDate = runDate;
 	}
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "Customer [docRef=" + docRef + ", "
+                + "selectorRef=" + selectorRef 
+                + ", batchType=" + batchType 
+                + ", site=" + site 
+                + ", lang=" + lang 
+                + ", stationery=" + stationery
+                + ", presentationPriority=" + presentationPriority 
+                + ", subBatch=" + subBatch 
+                + ", sortField=" + sortField 
+                + ", fleetNo=" + fleetNo 
+                + ", msc=" + msc
+                + ", groupId=" + groupId 
+                + ", paperSize=" + paperSize 
+                + ", eog=" + eog 
+                + ", dps=" + dps 
+                + ", insertRef=" + insertRef 
+                + ", envelope=" + envelope
+                + ", mmBarcodeContent=" + mmBarcodeContent 
+                + ", sot=" + sot 
+                + ", appName=" + appName
+                + ", mmCustomerContent=" + mmCustomerContent 
+                + ", runNo=" + runNo 
+                + ", runDate=" + runDate
+                + ", mailingId=" + mailingId 
+                + ", sob=" + sob 
+                + ", sequenceInChild=" + sequenceInChild
+                + ", batchSequence=" + batchSequence 
+                + ", noOfPages=" + noOfPages 
+                + ", totalPagesInGroup=" + totalPagesInGroup 
+                + ", tenDigitJid=" + tenDigitJid 
+                + ", eightDigitJid=" + eightDigitJid 
+                + ", weight="+ weight + ", size=" + size 
+                + ", product=" + product
+                + ", postcode=" + postcode
+                + ", transactionID=" + transactionID + "]";
+    }
 
 }
