@@ -47,8 +47,10 @@ public class SelectorLookup {
 	/*****************************************************************************************/
 
 	public SelectorLookup() {
-
-		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+	    
+	    LOGGER.trace("Loading Selector Lookup file '{}'", filename);
+		
+	    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 
 			while ((line = br.readLine()) != null) {

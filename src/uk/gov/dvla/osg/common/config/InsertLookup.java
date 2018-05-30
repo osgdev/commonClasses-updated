@@ -49,7 +49,8 @@ public class InsertLookup {
 
 	private InsertLookup() {
 
-		LOGGER.trace("Creating Insert Lookup..");
+	    LOGGER.trace("Loading Insert Lookup file '{}'", filename);
+	    
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 			while ((line = br.readLine()) != null) {

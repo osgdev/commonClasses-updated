@@ -49,7 +49,9 @@ public class EnvelopeLookup {
 	/*****************************************************************************************/
 
 	private EnvelopeLookup() {
-		LOGGER.info("Creating Envelope Lookup..");
+	    
+	    LOGGER.trace("Loading Envelope Lookup file '{}'", filename);
+	    
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 			while ((line = br.readLine()) != null) {

@@ -64,8 +64,10 @@ public class PostageConfiguration {
 	/*****************************************************************************************/
 
 	private PostageConfiguration() {
-	    LOGGER.info("Creating Envelope Lookup.. {}", filename);
-		loadRequiredFields();
+	    
+	    LOGGER.trace("Loading Postage Configuration file '{}'", filename);
+		
+	    loadRequiredFields();
 
 		parseConfig(filename);
 

@@ -48,7 +48,10 @@ public class PresentationConfiguration {
     /*****************************************************************************************/
 
 	public PresentationConfiguration() {
-		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+	    
+	    LOGGER.trace("Loading Presentation Configuration file '{}'", filename);
+		
+	    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line = null;
 			Integer k = 0;
 			while ((line = br.readLine()) != null) {

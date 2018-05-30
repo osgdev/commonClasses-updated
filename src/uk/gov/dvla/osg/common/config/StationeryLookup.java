@@ -47,7 +47,7 @@ public class StationeryLookup {
     /*****************************************************************************************/
     
 	private StationeryLookup(){
-		LOGGER.info("Creating Stationery Lookup..");
+	    LOGGER.trace("Loading Stationery Lookup file '{}'", filename);
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 		    while ((line = br.readLine()) != null) {

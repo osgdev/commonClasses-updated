@@ -46,7 +46,7 @@ public class PapersizeLookup {
     /*****************************************************************************************/
     
 	private PapersizeLookup() {
-		LOGGER.info("Creating Papersize Lookup..");
+	    LOGGER.trace("Loading Papersize Lookup file '{}'", filename);
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 		    while ((line = br.readLine()) != null) {
