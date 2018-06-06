@@ -47,7 +47,7 @@ public class ProductionConfiguration {
         }
         return SingletonHelper.INSTANCE;
     }
-
+    
     public static void init(String file) throws RuntimeException {
         if (StringUtils.isBlank(filename)) {
             if (new File(file).isFile()) {

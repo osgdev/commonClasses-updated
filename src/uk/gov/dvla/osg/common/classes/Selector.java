@@ -2,11 +2,11 @@ package uk.gov.dvla.osg.common.classes;
 
 public class Selector {
 
-	private String productionConfig;
-	private String postageConfig;
-	private String presentationConfig;
-	private String documentationConfig;
-	private String cardDocumentationConfig;
+	private String productionConfig = "";
+	private String postageConfig = "";
+	private String presentationConfig = "";
+	private String documentationConfig = "";
+	private String cardDocumentationConfig = "";
 
 	public Selector(String productionConfig, String postageConfig, String presentationConfig) {
 		this.postageConfig=postageConfig;
@@ -33,4 +33,14 @@ public class Selector {
 	public String getCardDocumentationConfig() {
 		return cardDocumentationConfig;
 	}
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "Selector [productionConfig=" + productionConfig + ", postageConfig=" + postageConfig
+                + ", presentationConfig=" + presentationConfig + ", documentationConfig=" + documentationConfig
+                + ", cardDocumentationConfig=" + cardDocumentationConfig + "]";
+    }
 }

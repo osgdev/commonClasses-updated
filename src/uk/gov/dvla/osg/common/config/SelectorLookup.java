@@ -46,7 +46,7 @@ public class SelectorLookup {
 
 	/*****************************************************************************************/
 
-	public SelectorLookup() {
+	private SelectorLookup() {
 	    
 	    LOGGER.trace("Loading Selector Lookup file '{}'", filename);
 		
@@ -65,11 +65,11 @@ public class SelectorLookup {
 		}
 	}
 
-	public HashMap<String, Selector> getLookup() {
-		return this.lookup;
-	}
-
-	public Selector get(String selector) {
+	public boolean isPresent(String selector) {
+	    return lookup.containsKey(selector);
+	}	
+	
+	public Selector getSelector(String selector) {
 		return lookup.get(selector);
 	}
 }

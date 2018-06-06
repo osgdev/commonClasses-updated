@@ -64,11 +64,7 @@ public class StationeryLookup {
 		}
 	}
 
-	public HashMap<String, Stationery> getLookup() {
-		return lookup;
-	}
-
-    public Stationery get(String id) {
+    public Stationery getStationery(String id) {
         return lookup.get(id);
     }
 }
