@@ -1,9 +1,6 @@
 package uk.gov.dvla.osg.common.config;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -25,6 +22,9 @@ public class ProductionConfiguration {
             envelopeWelshOcr, envelopeEnglishMm, envelopeWelshMm, envelopeEnglishUncoded, envelopeWelshUncoded;
     
     private Integer traySize, maxMulti, minimumMailsort;
+    
+    private boolean unsortedInMultis;
+    
     // Map batch values to enum
     private Map<FullBatchType, Integer> batchMaxMap = new HashMap<>();
     private Map<FullBatchType, Integer> groupMaxMap = new HashMap<>();
@@ -67,9 +67,8 @@ public class ProductionConfiguration {
         LOGGER.trace("Loading Production file '{}'", filename);
         // Loads key/value pairs from file
         Properties props = new Properties();
-    	InputStream input;
-		try {
-			input = new FileInputStream(new File(filename));
+        
+		try (InputStream input = new FileInputStream(new File(filename))) {
 			props.load(input);
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -116,6 +115,8 @@ public class ProductionConfiguration {
         this.minimumMailsort = Integer.parseInt(props.getProperty("minimum.mailsort"));
         this.maxMulti = Integer.parseInt(props.getProperty("maxMulti"));
         this.traySize = Integer.parseInt(props.getProperty("traySize"));
+        
+        this.unsortedInMultis = props.getProperty("unsortedInMultis").toUpperCase().startsWith("Y") ? true : false;
         
         // Batch Max
         batchMaxMap.put(FullBatchType.FLEETE, Integer.parseInt(props.getProperty("batchMax.english.fleet")));
@@ -222,5 +223,9 @@ public class ProductionConfiguration {
 
 	public String getEnvelopeEnglishDefault() {
 		return envelopeEnglishDefault;
+	}
+	
+	public boolean isMultiInUnsorted() {
+	    return this.unsortedInMultis;
 	}
 }
