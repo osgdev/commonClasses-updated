@@ -23,7 +23,7 @@ public class ProductionConfiguration {
     
     private Integer traySize, maxMulti, minimumMailsort;
     
-    private boolean unsortedInMultis;
+    private boolean unsortedMultis;
     
     // Map batch values to enum
     private Map<FullBatchType, Integer> batchMaxMap = new HashMap<>();
@@ -116,7 +116,7 @@ public class ProductionConfiguration {
         this.maxMulti = Integer.parseInt(props.getProperty("maxMulti"));
         this.traySize = Integer.parseInt(props.getProperty("traySize"));
         
-        this.unsortedInMultis = props.getProperty("unsortedInMultis").toUpperCase().startsWith("Y") ? true : false;
+        this.unsortedMultis = props.getProperty("unsortedMultis").toUpperCase().startsWith("Y") ? true : false;
         
         // Batch Max
         batchMaxMap.put(FullBatchType.FLEETE, Integer.parseInt(props.getProperty("batchMax.english.fleet")));
@@ -225,7 +225,7 @@ public class ProductionConfiguration {
 		return envelopeEnglishDefault;
 	}
 	
-	public boolean isMultiInUnsorted() {
-	    return this.unsortedInMultis;
+	public boolean isMultiUnsorted() {
+	    return this.unsortedMultis;
 	}
 }
