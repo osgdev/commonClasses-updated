@@ -1,19 +1,17 @@
 package uk.gov.dvla.osg.common.config;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import uk.gov.dvla.osg.common.classes.FullBatchType;
-import uk.gov.dvla.osg.common.classes.Product;
+import uk.gov.dvla.osg.common.enums.FullBatchType;
+import uk.gov.dvla.osg.common.enums.Product;
 
 public class ProductionConfiguration {
 
@@ -67,12 +65,10 @@ public class ProductionConfiguration {
         LOGGER.trace("Loading Production file '{}'", filename);
         // Loads key/value pairs from file
         Properties props = new Properties();
-    	InputStream input;
-		try {
-			input = new FileInputStream(new File(filename));
+		try (InputStream input = new FileInputStream(new File(filename))) {
 			props.load(input);
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			LOGGER.fatal(ExceptionUtils.getStackTrace(ex));
 		}
 	
         siteMap.put(FullBatchType.FLEETE, props.getProperty("site.english.fleet").toUpperCase());

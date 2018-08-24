@@ -1,8 +1,10 @@
 package uk.gov.dvla.osg.common.classes;
 
-import static uk.gov.dvla.osg.common.classes.BatchType.*;
+import static uk.gov.dvla.osg.common.enums.BatchType.*;
 
 import org.apache.commons.lang3.StringUtils;
+
+import uk.gov.dvla.osg.common.enums.*;
 
 public class Customer {
 

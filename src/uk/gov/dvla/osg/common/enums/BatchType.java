@@ -1,4 +1,4 @@
-package uk.gov.dvla.osg.common.classes;
+package uk.gov.dvla.osg.common.enums;
 
 public enum BatchType {
 	CLERICAL ("CLERICAL"),
