@@ -515,38 +515,39 @@ public class Customer {
      */
     @Override
     public String toString() {
+        //return new ToStringBuilder(this).append("docRef", docRef).toString();
         return "Customer [docRef=" + docRef + ", "
                 + "selectorRef=" + selectorRef 
                 + ", batchType=" + batchType 
-                + ", site=" + site 
+                + ", subBatch=" + subBatch 
                 + ", lang=" + lang 
+                + ", msc=" + msc
+                + ", fleetNo=" + fleetNo 
+                + ", groupId=" + groupId 
+                + ", sob=" + sob 
+                + ", sot=" + sot 
+                + ", eog=" + eog 
+                + ", sequenceInChild=" + sequenceInChild
+                + ", batchSequence=" + batchSequence 
+                + ", tenDigitJid=" + tenDigitJid 
+                + ", eightDigitJid=" + eightDigitJid 
+                + ", site=" + site 
+                + ", totalPagesInGroup=" + totalPagesInGroup 
+                + ", weight="+ weight + ", size=" + size 
                 + ", stationery=" + stationery
                 + ", presentationPriority=" + presentationPriority 
-                + ", subBatch=" + subBatch 
                 + ", sortField=" + sortField 
-                + ", fleetNo=" + fleetNo 
-                + ", msc=" + msc
-                + ", groupId=" + groupId 
                 + ", paperSize=" + paperSize 
-                + ", eog=" + eog 
                 + ", dps=" + dps 
                 + ", insertRef=" + insertRef 
                 + ", envelope=" + envelope
                 + ", mmBarcodeContent=" + mmBarcodeContent 
-                + ", sot=" + sot 
                 + ", appName=" + appName
                 + ", mmCustomerContent=" + mmCustomerContent 
                 + ", runNo=" + runNo 
                 + ", runDate=" + runDate
                 + ", mailingId=" + mailingId 
-                + ", sob=" + sob 
-                + ", sequenceInChild=" + sequenceInChild
-                + ", batchSequence=" + batchSequence 
                 + ", noOfPages=" + noOfPages 
-                + ", totalPagesInGroup=" + totalPagesInGroup 
-                + ", tenDigitJid=" + tenDigitJid 
-                + ", eightDigitJid=" + eightDigitJid 
-                + ", weight="+ weight + ", size=" + size 
                 + ", product=" + product
                 + ", postcode=" + postcode
                 + ", transactionID=" + transactionID + "]";
