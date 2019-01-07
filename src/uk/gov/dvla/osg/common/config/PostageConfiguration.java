@@ -29,6 +29,8 @@ public class PostageConfiguration {
 	private List<BatchType> ukmBatchTypes;
 	private HashSet<String> requiredFields = new HashSet<String>();
 
+    private String mailProvider = "";
+
 	/******************************************************************************************
 	 * SINGLETON PATTERN
 	 ******************************************************************************************/
@@ -237,6 +239,8 @@ public class PostageConfiguration {
 					} else if ("mm.appName".equalsIgnoreCase(attribute)) {
 						mmAppname = value;
 						requiredFields.remove("mm.appName");
+					} else if("provider".equalsIgnoreCase(attribute)) {
+					    mailProvider  = value;
 					}
 				}
 			}
@@ -249,6 +253,10 @@ public class PostageConfiguration {
 		}
 	}
 
+	public String getMailProvider() {
+	    return mailProvider;
+	}
+	
 	public String getUkmConsignorFileArchive() {
 		return ukmConsignorFileArchive;
 	}
