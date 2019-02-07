@@ -70,11 +70,11 @@ public class Customer {
 		this.tenDigitJid = tenDigitJid;
 	}
 
-	public String getMmCustomerContent() {
+	public String getCustomerContent() {
 		return mmCustomerContent;
 	}
 
-	public void setMmCustomerContent(String mmCustomerContent) {
+	public void setCustomerContent(String mmCustomerContent) {
 		this.mmCustomerContent = mmCustomerContent;
 	}
 

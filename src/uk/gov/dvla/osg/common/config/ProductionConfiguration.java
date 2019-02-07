@@ -27,6 +27,8 @@ public class ProductionConfiguration {
     private Map<FullBatchType, Integer> batchMaxMap = new HashMap<>();
     private Map<FullBatchType, Integer> groupMaxMap = new HashMap<>();
     private Map<FullBatchType, String> siteMap = new HashMap<>();
+    // False if MULTIs become singles when changed to UNSORTED
+    private boolean multiUnsorted;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -140,6 +142,8 @@ public class ProductionConfiguration {
         groupMaxMap.put(FullBatchType.CLERICALW, Integer.parseInt(props.getProperty("groupMax.welsh.clerical")));
         groupMaxMap.put(FullBatchType.MULTIE, Integer.parseInt(props.getProperty("groupMax.english.multi")));
         groupMaxMap.put(FullBatchType.MULTIW, Integer.parseInt(props.getProperty("groupMax.welsh.multi")));
+        
+        this.multiUnsorted = props.containsKey("multi.unsorted") && props.getProperty("multi.unsorted").toUpperCase().equals("Y") ? true : false;
 
     }
 
@@ -218,5 +222,9 @@ public class ProductionConfiguration {
 
 	public String getEnvelopeEnglishDefault() {
 		return envelopeEnglishDefault;
+	}
+	
+	public boolean isMultiUnsorted() {
+	    return multiUnsorted;
 	}
 }
