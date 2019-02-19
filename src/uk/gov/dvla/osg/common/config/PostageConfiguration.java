@@ -385,7 +385,7 @@ public class PostageConfiguration {
 		return ukmConsignorDestinationDepartment;
 	}
 
-	public String getMmMachineable() {
+	public String getMmMachinable() {
 		return mmMachineable;
 	}
 

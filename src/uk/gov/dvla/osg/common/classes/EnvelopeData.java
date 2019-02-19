@@ -1,12 +1,12 @@
 package uk.gov.dvla.osg.common.classes;
 
-public class Envelope {
+public class EnvelopeData {
 
 	private double thickness;
 	private int foldMultiplier;
 	private double weight;
 
-	public Envelope(double thickness, int foldMultiplier, double weight) {
+	public EnvelopeData(double thickness, int foldMultiplier, double weight) {
 		this.thickness = thickness;
 		this.foldMultiplier = foldMultiplier;
 		this.weight = weight;

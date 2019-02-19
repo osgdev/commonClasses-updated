@@ -227,4 +227,16 @@ public class ProductionConfiguration {
 	public boolean isMultiUnsorted() {
 	    return multiUnsorted;
 	}
+	
+	public boolean isBatchTypeOn(FullBatchType fbt) {
+	    return !siteMap.get(fbt).contains("X");
+	}
+
+    public boolean isBatchTypeOn(String string, String language) {
+        return !siteMap.get(FullBatchType.valueOf(string+language)).contains("X");
+    }
+    
+    public Map<FullBatchType, Integer> getGroupMaxMap() {
+        return this.groupMaxMap;
+    }
 }

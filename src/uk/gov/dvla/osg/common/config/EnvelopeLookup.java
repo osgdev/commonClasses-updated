@@ -11,12 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import uk.gov.dvla.osg.common.classes.Envelope;
+import uk.gov.dvla.osg.common.classes.EnvelopeData;
 
 public class EnvelopeLookup {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private HashMap<String, Envelope> lookup = new HashMap<>();
+	private HashMap<String, EnvelopeData> lookup = new HashMap<>();
 
 	/******************************************************************************************
 	 *                               SINGLETON PATTERN
@@ -57,7 +57,7 @@ public class EnvelopeLookup {
 			while ((line = br.readLine()) != null) {
 				String[] array = line.split(",");
 				if (!("REF".equals(array[0].trim()))) {
-					lookup.put(array[0].trim().toUpperCase(), new Envelope(Double.parseDouble(array[1].trim()),
+					lookup.put(array[0].trim().toUpperCase(), new EnvelopeData(Double.parseDouble(array[1].trim()),
 							Integer.parseInt(array[2].trim()), Double.parseDouble(array[3].trim())));
 				}
 			}
@@ -73,11 +73,11 @@ public class EnvelopeLookup {
 		}
 	}
 
-	public HashMap<String, Envelope> getLookup() {
+	public HashMap<String, EnvelopeData> getLookup() {
 		return lookup;
 	}
 
-	public Envelope get(String id) {
+	public EnvelopeData get(String id) {
 		return lookup.get(id);
 	}
 }
