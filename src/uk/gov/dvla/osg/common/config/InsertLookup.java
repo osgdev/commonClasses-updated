@@ -2,75 +2,57 @@ package uk.gov.dvla.osg.common.config;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import uk.gov.dvla.osg.common.classes.Insert;
+import uk.gov.dvla.osg.common.classes.InsertPack;
 
 public class InsertLookup {
 
-	private static final Logger LOGGER = LogManager.getLogger();
-	private HashMap<String, Insert> lookup = new HashMap<>();
+    private static final Logger LOGGER = LogManager.getLogger();
+    private HashMap<String, InsertPack> lookup = new HashMap<>();
 
-	/******************************************************************************************
-	 *                              SINGLETON PATTERN
-	 ******************************************************************************************/
-	private static String filename;
+    public static InsertLookup getInstance(String filename) {
+        return new InsertLookup(filename);
+    }
 
-	private static class SingletonHelper {
-		private static final InsertLookup INSTANCE = new InsertLookup();
-	}
+    private InsertLookup(String filename) {
 
-	public static InsertLookup getInstance() {
-		if (StringUtils.isBlank(filename)) {
-			throw new RuntimeException("Insert Lookup not initialised before use");
-		}
-		return SingletonHelper.INSTANCE;
-	}
-	
-	public static void init(String file) throws RuntimeException {
-		if (StringUtils.isBlank(filename)) {
-			if (new File(file).isFile()) {
-				filename = file;
-			} else {
-				throw new RuntimeException("Insert Lookup File " + filename + " does not exist on filepath.");
-			}
-		} else {
-			throw new RuntimeException("Insert Lookup has already been initialised");
-		}
-	}
+        if (!new File(filename).isFile()) {
+            throw new RuntimeException(String.format("Insert Lookup File '%s'does not exist on filepath", filename));
+        }
 
-	/*****************************************************************************************/
+        LOGGER.trace("Loading Insert Lookup file '{}'", filename);
+        Path pathToFile = Paths.get(filename);
 
-	private InsertLookup() {
+        // create an instance of BufferedReader using try with resource to close
+        // resources
+        try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
+            // read the first line from the text file
+            String line = br.readLine();
 
-	    LOGGER.trace("Loading Insert Lookup file '{}'", filename);
-	    
-		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] array = line.split(",");
-				if (!("INSERT REF".equals(array[0].trim()))) {
-					lookup.put(array[0].trim(), new Insert(Double.parseDouble(array[1].trim()),
-							Double.parseDouble(array[2].trim()), Integer.parseInt(array[3].trim())));
-				}
-			}
-		} catch (IndexOutOfBoundsException | IOException | NullPointerException e) {
-			LOGGER.fatal("Insert lookup file error: {}", e.getMessage());
-			System.exit(1);
-		}
-	}
+            // loop until all lines are read
+            while (line != null) {
+                String[] attributes = line.split(",");
+                if (!("INSERT REF".equals(attributes[0].trim()))) {
+                    InsertPack pack = InsertPack.getInstance(attributes);
+                    lookup.put(attributes[0].trim(), pack);
+                }
+            }
+        } catch (IndexOutOfBoundsException | IOException | NullPointerException e) {
+            LOGGER.fatal("Insert lookup file error: {}", e.getMessage());
+            System.exit(1);
+        }
+    }
 
-	public HashMap<String, Insert> getLookup() {
-		return lookup;
-	}
-
-	public Insert get(String id) {
-		return lookup.get(id);
-	}
+    public InsertPack get(String id) {
+        return lookup.get(id);
+    }
 }
