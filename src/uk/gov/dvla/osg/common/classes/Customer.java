@@ -436,7 +436,7 @@ public class Customer {
 		this.presentationPriority = priority;
 		//this.presentationPriority = priority;
 		if (this.batchType.equals(UNSORTED)) {
-			this.msc = "99999";
+			this.msc = "";
 		}
 	}
 

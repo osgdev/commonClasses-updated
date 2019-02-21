@@ -143,7 +143,13 @@ public class ProductionConfiguration {
         groupMaxMap.put(FullBatchType.MULTIE, Integer.parseInt(props.getProperty("groupMax.english.multi")));
         groupMaxMap.put(FullBatchType.MULTIW, Integer.parseInt(props.getProperty("groupMax.welsh.multi")));
         
-        this.multiUnsorted = props.containsKey("multi.unsorted") && props.getProperty("multi.unsorted").toUpperCase().equals("Y") ? true : false;
+        if (props.containsKey("multi.unsorted")) {
+            // Key present in config file so set to the given value
+            this.multiUnsorted = props.getProperty("multi.unsorted").toUpperCase().equals("Y");
+        } else {
+            // Key not present in config file so default to false
+            this.multiUnsorted = false;
+        }
 
     }
 
@@ -197,10 +203,15 @@ public class ProductionConfiguration {
     }
 
     public int getGroupMax(FullBatchType fbt) {
-    	
+    	// PB 21/02/19 - fix for groups in UNSORTED
         if (groupMaxMap.containsKey(fbt)) {
 			return groupMaxMap.get(fbt);
-		}
+		} else if (multiUnsorted && fbt.equals(FullBatchType.UNSORTEDE)) {
+		    return groupMaxMap.get(FullBatchType.MULTIE);
+		} else if (multiUnsorted && fbt.equals(FullBatchType.UNSORTEDW)) {
+            return groupMaxMap.get(FullBatchType.MULTIW);
+        }
+        
         return 0;
     }
     
