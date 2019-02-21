@@ -1,8 +1,14 @@
 package uk.gov.dvla.osg.common.config;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -12,58 +18,37 @@ import uk.gov.dvla.osg.common.enums.BatchType;
 
 public class PresentationConfiguration {
 
-	private static final Logger LOGGER = LogManager.getLogger();
-	private static Map<String, Integer> presLookup = new HashMap<>();
+    static final Logger LOGGER = LogManager.getLogger();
+    private final List<String> priorityList;
 
-    /******************************************************************************************
-     *              SINGLETON PATTERN
-     ******************************************************************************************/
-    private static String filename;
-
-    private static class SingletonHelper {
-        private static final PresentationConfiguration INSTANCE = new PresentationConfiguration();
-    }
-
-    public static PresentationConfiguration getInstance() {
-        if (StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Presentation Configuration not initialised before use");
-        }
-        return SingletonHelper.INSTANCE;
-    }
-
-    public static void init(String file) throws RuntimeException {
-        if (StringUtils.isBlank(filename)) {
-            if (new File(file).isFile()) {
-                filename = file;
-            } else {
-                throw new RuntimeException("Presentation File " + filename + " does not exist on filepath.");
-            }
-        } else {
+    public static PresentationConfiguration getInstance(String filename) throws RuntimeException {
+        if (!StringUtils.isBlank(filename)) {
             throw new RuntimeException("Presentation Configuration has already been initialised");
         }
-    }
-    /*****************************************************************************************/
+        if (!new File(filename).isFile()) {
+            throw new RuntimeException("Presentation File " + filename + " does not exist on filepath.");
+        }
 
-	public PresentationConfiguration() {
-	    
-	    LOGGER.trace("Loading Presentation Configuration file '{}'", filename);
-		
-	    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-			String line = null;
-			Integer k = 0;
-			while ((line = br.readLine()) != null) {
-				presLookup.put(line.trim(), k++);
-			}
-		} catch (IOException ex) {
-			LOGGER.fatal("Unable to read Presentation Configuration file {} {}", filename, ex.getMessage());
-			System.exit(1);
-		}
-	}
-	public int lookupRunOrder(String batchComparator) {
-		return presLookup.containsKey(batchComparator) ? presLookup.get(batchComparator) : 999;
-	}
-	
-	public int lookupRunOrder(BatchType batchComparator) {
-		return presLookup.containsKey(batchComparator.name()) ? presLookup.get(batchComparator.name()) : 999;
-	}
+        return new PresentationConfiguration(filename);
+    }
+
+    private PresentationConfiguration(String filename) {
+
+        Path pathToFile = Paths.get(filename);
+        
+        // create an instance of BufferedReader using try with resource to close resources
+        try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
+            priorityList = br.lines().collect(Collectors.toList());
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format("Unable to read Presentation Configuration file %s : %s", filename, ex.getMessage()));
+        }
+    }
+
+    public int lookupRunOrder(String batchComparator) {
+        return priorityList.contains(batchComparator) ? priorityList.indexOf(batchComparator) : 999;
+    }
+
+    public int lookupRunOrder(BatchType batchType) {
+        return priorityList.contains(batchType.name()) ? priorityList.indexOf(batchType.name()) : 999;
+    }
 }

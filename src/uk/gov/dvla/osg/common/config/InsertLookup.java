@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,20 +17,25 @@ import uk.gov.dvla.osg.common.classes.InsertPack;
 
 public class InsertLookup {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    static final Logger LOGGER = LogManager.getLogger();
+    
     private HashMap<String, InsertPack> lookup = new HashMap<>();
 
     public static InsertLookup getInstance(String filename) {
+        
+        if (StringUtils.isBlank(filename)) {
+            throw new RuntimeException("Insert Lookup file filename is blank");
+        }
+        
+        if (!new File(filename).isFile()) {
+            throw new RuntimeException(String.format("Insert Lookup File '%s'does not exist on filepath", filename));
+        }
+        
         return new InsertLookup(filename);
     }
 
     private InsertLookup(String filename) {
 
-        if (!new File(filename).isFile()) {
-            throw new RuntimeException(String.format("Insert Lookup File '%s'does not exist on filepath", filename));
-        }
-
-        LOGGER.trace("Loading Insert Lookup file '{}'", filename);
         Path pathToFile = Paths.get(filename);
 
         // create an instance of BufferedReader using try with resource to close

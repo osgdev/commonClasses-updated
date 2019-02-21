@@ -1,10 +1,12 @@
 package uk.gov.dvla.osg.common.enums;
 
 public enum Product {
-	MM ("MAILMARK"),
-	OCR ("OCR"),
-	UNSORTED ("UNSORTED"),
-	UNCODED ("UNCODED");
+    
+	MM("MAILMARK"),
+	OCR("OCR"),
+	UNSORTED("UNSORTED"),
+	UNCODED("UNCODED"),
+	DEFAULT("DEFAULT");
 	
 	private String product;
 	

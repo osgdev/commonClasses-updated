@@ -2,9 +2,13 @@ package uk.gov.dvla.osg.common.config;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -12,59 +16,66 @@ import org.apache.logging.log4j.Logger;
 
 import uk.gov.dvla.osg.common.classes.Stationery;
 
+/**
+ * Used to lookup Stationery data from the Stationery Lookup file by the type of stationery.
+ * Stationery types are preset for the item in the input DPF.
+ */
 public class StationeryLookup {
-	private static final Logger LOGGER = LogManager.getLogger();
-	private HashMap<String, Stationery> lookup = new HashMap<String, Stationery>();
 	
-    /******************************************************************************************
-     *              SINGLETON PATTERN
-     ******************************************************************************************/
-    private static String filename;
-
-    private static class SingletonHelper {
-        private static final StationeryLookup INSTANCE = new StationeryLookup();
-    }
-
-    public static StationeryLookup getInstance() {
+    static final Logger LOGGER = LogManager.getLogger();
+	
+	private Map<String, Stationery> lookup;
+	
+    
+    /**
+     * Gets the single instance of StationeryLookup.
+     *
+     * @param filename the name and path of the stationery lookup file
+     * @return single instance of StationeryLookup
+     */
+    public StationeryLookup getInstance(String filename) {
         if (StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Stationery Lookup not initialised before use");
+            throw new RuntimeException("Stationery Lookup file filename is blank");
         }
-        return SingletonHelper.INSTANCE;
+        
+        if (new File(filename).isFile()) {
+            throw new RuntimeException(String.format("Stationery Lookup file %s does not exist on filepath.", filename));
+        }
+        
+        return new StationeryLookup(filename);
     }
     
-    public static void init(String file) throws RuntimeException {
-        if (StringUtils.isBlank(filename)) {
-            if (new File(file).isFile()) {
-                filename = file;
-            } else {
-                throw new RuntimeException("Stationery Lookup file " + filename + " does not exist on filepath.");
-            }
-        } else {
-            throw new RuntimeException("Production Configuration has already been initialised");
-        }
-    }
-
-    /*****************************************************************************************/
-    
-	private StationeryLookup(){
+	/**
+	 * Instantiates a new stationery lookup.
+	 *
+	 * @param filename the filename
+	 */
+	private StationeryLookup(String filename) {
+	    
 	    LOGGER.trace("Loading Stationery Lookup file '{}'", filename);
-		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-			String line;
-		    while ((line = br.readLine()) != null) {
-		    	String[] array = line.split(",");
-		    	if( !("REF".equals(array[0].trim())) ){
-		    		lookup.put(array[0].trim(), new Stationery(Double.parseDouble(array[1].trim()),
-		    								Double.parseDouble(array[2].trim())));
-		    	}
-		    }
-		    br.close();
-		} catch (IndexOutOfBoundsException | IOException | NullPointerException e) {
-			LOGGER.fatal("Stationery lookup file error: '{}'", e.getMessage());
-			System.exit(1);
+        Path pathToFile = Paths.get(filename);
+        
+        // create an instance of BufferedReader using try with resource to close resources
+        try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
+            // ignore any line starting with REF
+            lookup = br.lines()
+                    .filter(line -> !line.startsWith("REF"))
+                    .map(line -> line.split(","))
+                    .map(elements -> Stationery.getInstance(elements))
+                    .collect(Collectors.toMap(Stationery::getType, p -> p));
+            
+		} catch (IndexOutOfBoundsException | IOException | NullPointerException ex) {
+		    throw new RuntimeException(String.format("Stationery lookup file error : %s", ex.getMessage()));
 		}
 	}
 
-    public Stationery getStationery(String id) {
-        return lookup.get(id);
+    /**
+     * Gets the stationery data for a type of stationery.
+     *
+     * @param stationeryType the stationery type
+     * @return the stationery data
+     */
+    public Stationery getStationery(String stationeryType) {
+        return lookup.get(stationeryType);
     }
 }

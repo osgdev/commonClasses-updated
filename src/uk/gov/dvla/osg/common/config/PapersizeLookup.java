@@ -1,9 +1,6 @@
 package uk.gov.dvla.osg.common.config;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +47,7 @@ public class PapersizeLookup {
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 		    while ((line = br.readLine()) != null) {
-		    	if( !(line.startsWith("#")) ){
+		    	if( !(line.startsWith("#")) ) {
 		    		String[] array = line.split(",",-1);
 		    		lookup.put(array[0].trim(), new PaperSize(Double.parseDouble(array[1].trim())));
 		    	}
