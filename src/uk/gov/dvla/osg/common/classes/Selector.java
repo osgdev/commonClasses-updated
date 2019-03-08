@@ -1,5 +1,8 @@
 package uk.gov.dvla.osg.common.classes;
 
+/**
+ * The Class Selector.
+ */
 public class Selector {
 
 	private String productionConfig = "";

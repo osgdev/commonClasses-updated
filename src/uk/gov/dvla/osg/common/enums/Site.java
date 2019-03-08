@@ -9,7 +9,7 @@ public enum Site {
 	
 	private final String site;
 
-	Site(String site) {
+	private Site(String site) {
         this.site = site;
     }
 

@@ -6,23 +6,23 @@ import uk.gov.dvla.osg.common.enums.BatchType;
 import uk.gov.dvla.osg.common.enums.FullBatchType;
 import uk.gov.dvla.osg.common.enums.Product;
 
-public class Customer {
+public class Item {
 
     private static final String ENDMARKER = "X";
 
     private String docRef, selectorRef, jobTypeAcronym, mailingId, runNo, runDate, subBatch, fleetNo, groupId, lang, paperSize, 
-                   sortField, eog, sot, sob = "", name1, name2, add1, add2, add3, add4, add5, postcode, dps, msc, stationery, 
+                   sortField, eog, sot, sob, name1, name2, add1, add2, add3, add4, add5, postcode, dps, msc, stationery, 
                    insertRef, envelopeName, customerContent, mmBarcodeContent, 
                    tenDigitJid, sequenceInChild, eightDigitJid, batchSequence, printingSite;
 
-    Double weight, size;
+    Double weight, pageThickness;
     
     private Integer noOfPages, totalPagesInGroup, presentationPriority, originalIndex;
 
     private BatchType batchType;
     private Product product;
 
-    private Customer(Builder builder) {
+    private Item(Builder builder) {
         this.originalIndex = builder.originalIndex;
         this.docRef = builder.docRef;
         this.selectorRef = builder.selectorRef;
@@ -53,7 +53,7 @@ public class Customer {
         this.customerContent = builder.customerContent;
         this.mmBarcodeContent = builder.mmBarcodeContent;
         this.weight = builder.weight;
-        this.size = builder.size;
+        this.pageThickness = builder.pageThickness;
         this.noOfPages = builder.noOfPages;
     }
 
@@ -344,9 +344,14 @@ public class Customer {
         return weight;
     }
     
-    public Double getSize() {
-        return size;
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
+    
+    public Double getPageThickness() {
+        return pageThickness;
+    }
+    
     
     public FullBatchType getFullBatchType() {
         return FullBatchType.valueOf(batchType.name() + lang);
@@ -379,7 +384,7 @@ public class Customer {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Customer other = (Customer) obj;
+        Item other = (Item) obj;
         if (batchType == null) {
             if (other.batchType != null) return false;
         } else if (!batchType.equals(other.batchType)) return false;
@@ -401,51 +406,9 @@ public class Customer {
         return true;
     }
 
-    /* (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString() */
-    @Override
-    public String toString() {
-        // return new ToStringBuilder(this).append("docRef", docRef).toString();
-        return "Customer [docRef=" + docRef + ", "
-                + "selectorRef=" + selectorRef
-                + ", batchType=" + batchType
-                + ", subBatch=" + subBatch
-                + ", lang=" + lang
-                + ", msc=" + msc
-                + ", fleetNo=" + fleetNo
-                + ", groupId=" + groupId
-                + ", sob=" + sob
-                + ", sot=" + sot
-                + ", eog=" + eog
-                + ", sequenceInChild=" + sequenceInChild
-                + ", batchSequence=" + batchSequence
-                + ", tenDigitJid=" + tenDigitJid
-                + ", eightDigitJid=" + eightDigitJid
-                + ", site=" + printingSite
-                + ", totalPagesInGroup=" + totalPagesInGroup
-                + ", weight=" + weight + ", size=" + size
-                + ", stationery=" + stationery
-                + ", presentationPriority=" + presentationPriority
-                + ", sortField=" + sortField
-                + ", paperSize=" + paperSize
-                + ", dps=" + dps
-                + ", insertRef=" + insertRef
-                + ", envelope=" + envelopeName
-                + ", mmBarcodeContent=" + mmBarcodeContent
-                + ", appName=" + jobTypeAcronym
-                + ", mmCustomerContent=" + customerContent
-                + ", runNo=" + runNo
-                + ", runDate=" + runDate
-                + ", mailingId=" + mailingId
-                + ", noOfPages=" + noOfPages
-                + ", product=" + product
-                + ", postcode=" + postcode
-                + "]";
-    }
 
     /**
-     * Creates builder to build {@link Customer}.
+     * Creates builder to build {@link Item}.
      * @return created builder
      */
     public static Builder builder(Integer originalIdx) {
@@ -453,7 +416,7 @@ public class Customer {
     }
 
     /**
-     * Builder to build {@link Customer}.
+     * Builder to build {@link Item}.
      */
     @SuppressWarnings("hiding")
     public static final class Builder {
@@ -484,7 +447,7 @@ public class Customer {
         private String customerContent;
         private String mmBarcodeContent;
         private Double weight;
-        private Double size;
+        private Double pageThickness;
         private Integer noOfPages;
         private Integer presentationPriority;
         private Integer originalIndex;
@@ -629,8 +592,8 @@ public class Customer {
             return this;
         }
 
-        public Builder size(Double size) {
-            this.size = size;
+        public Builder pageThickness(Double pageThickness) {
+            this.pageThickness = pageThickness;
             return this;
         }
 
@@ -639,23 +602,25 @@ public class Customer {
             return this;
         }
 
-        public Builder withPresentationPriority(Integer presentationPriority) {
+        public Builder presentationPriority(Integer presentationPriority) {
             this.presentationPriority = presentationPriority;
             return this;
         }
 
-        public Builder withOriginalIndex(Integer originalIndex) {
+        public Builder originalIndex(Integer originalIndex) {
             this.originalIndex = originalIndex;
             return this;
         }
 
-        public Builder withBatchType(BatchType batchType) {
+        public Builder batchType(BatchType batchType) {
             this.batchType = batchType;
             return this;
         }
 
-        public Customer build() {
-            return new Customer(this);
+        public Item build() {
+            return new Item(this);
         }
     }
+
+
 }

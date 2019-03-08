@@ -1,5 +1,8 @@
 package uk.gov.dvla.osg.common.enums;
 
+/**
+ * The Enum FullBatchType.
+ */
 public enum FullBatchType {
 	
 	CLERICALE("CLERICAL", "E"), 
@@ -24,23 +27,53 @@ public enum FullBatchType {
     private final String batchType;
     private final String language;
 
+    /**
+     * Gets the.
+     *
+     * @param batchType the batch type
+     * @param lang the lang
+     * @return the full batch type
+     */
     public static FullBatchType get(BatchType batchType, String lang) {
         return FullBatchType.valueOf(batchType.name()+lang);
     }
     
+    /**
+     * Gets the.
+     *
+     * @param batchType the batch type
+     * @param lang the lang
+     * @return the full batch type
+     */
     public static FullBatchType get(String batchType, String lang) {
         return FullBatchType.valueOf(batchType+lang);
     }
     
+    /**
+     * Instantiates a new full batch type.
+     *
+     * @param batchType the batch type
+     * @param lang the lang
+     */
     private FullBatchType(String batchType, String lang) {
         this.batchType = batchType;
         this.language = lang;
     }
 
+    /**
+     * Gets the batch type.
+     *
+     * @return the batch type
+     */
     public String getBatchType() {
         return this.batchType;
     }
     
+    /**
+     * Gets the language.
+     *
+     * @return the language
+     */
     public String getLanguage() {
         return this.language;
     }

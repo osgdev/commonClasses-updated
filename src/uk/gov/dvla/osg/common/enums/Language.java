@@ -1,12 +1,13 @@
 package uk.gov.dvla.osg.common.enums;
 
 public enum Language {
- E ("English"),
- W ("Welsh");
+    
+     E ("English"),
+     W ("Welsh");
 	
 	private String language;
 	
-	Language(String language) {
+	private Language(String language) {
 		this.language = language;
 	}
 	

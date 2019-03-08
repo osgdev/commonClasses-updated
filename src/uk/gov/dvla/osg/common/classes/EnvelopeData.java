@@ -1,7 +1,11 @@
 package uk.gov.dvla.osg.common.classes;
 
+/**
+ * The Class EnvelopeData.
+ */
 public class EnvelopeData {
 
+    private final String type;
 	private final double thickness;
 	private final int foldMultiplier;
 	private final double weight;
@@ -13,11 +17,12 @@ public class EnvelopeData {
      * @return single instance of EnvelopeData
      */
     public static EnvelopeData getInstance(String[] attributes) {
-        Double thickness = Double.parseDouble(attributes[1].trim());
-        Double weight = Double.parseDouble(attributes[3].trim());
+        String type = attributes[0].trim();
+        double thickness = Double.parseDouble(attributes[1].trim());
+        double weight = Double.parseDouble(attributes[3].trim());
         int multiplier = Integer.parseInt(attributes[2].trim());
         
-        return new EnvelopeData(thickness, weight, multiplier);
+        return new EnvelopeData(type, thickness, weight, multiplier);
     }
     
 	/**
@@ -27,12 +32,22 @@ public class EnvelopeData {
 	 * @param weight the envelope weight
 	 * @param foldMultiplier the fold multiplier
 	 */
-	private EnvelopeData(double thickness, double weight, int foldMultiplier) {
-		this.thickness = thickness;
-		this.foldMultiplier = foldMultiplier;
+	private EnvelopeData(String type, double thickness, double weight, int foldMultiplier) {
+		this.type = type;
+	    this.thickness = thickness;
+		this.foldMultiplier = foldMultiplier == 0 ? 1 : foldMultiplier;
 		this.weight = weight;
 	}
 
+	/**
+	 * Gets the type.
+	 *
+	 * @return the type
+	 */
+	public String getType() {
+	    return type;
+	}
+	
 	/**
 	 * Gets the envelope thickness.
 	 *
@@ -59,6 +74,11 @@ public class EnvelopeData {
 	public double getWeight() {
 		return weight;
 	}
+
+    @Override
+    public String toString() {
+        return String.format("EnvelopeData [type=%s, thickness=%s, foldMultiplier=%s, weight=%s]", type, thickness, foldMultiplier, weight);
+    }
 
 
 

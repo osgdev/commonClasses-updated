@@ -1,6 +1,10 @@
 package uk.gov.dvla.osg.common.enums;
 
+/**
+ * The Enum BatchType.
+ */
 public enum BatchType {
+    
 	CLERICAL ("CLERICAL"),
 	FLEET ("FLEET"),
 	MULTI ("MULTI"),
@@ -13,10 +17,20 @@ public enum BatchType {
 	
 	private String batchName;
 	
-	BatchType(String name) {
+	/**
+	 * Instantiates a new batch type.
+	 *
+	 * @param name the name
+	 */
+	private BatchType(String name) {
 		this.batchName = name;
 	}
 	
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
 	public String getName() {
 		return batchName;
 	}

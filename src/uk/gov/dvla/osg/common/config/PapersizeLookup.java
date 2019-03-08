@@ -1,75 +1,80 @@
 package uk.gov.dvla.osg.common.config;
 
-import java.io.*;
-import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import uk.gov.dvla.osg.common.classes.PaperSize;
+import uk.gov.dvla.osg.common.classes.PaperSizeDivisor;
 
+/**
+ * The Class PapersizeLookup.
+ */
 public class PapersizeLookup {
-	private static final Logger LOGGER = LogManager.getLogger();
-	private HashMap<String, PaperSize> lookup = new HashMap<>();
 	
-    /******************************************************************************************
-     *              SINGLETON PATTERN
-     ******************************************************************************************/
-    private static String filename;
-
-    private static class SingletonHelper {
-        private static final PapersizeLookup INSTANCE = new PapersizeLookup();
-    }
-
-    public static PapersizeLookup getInstance() {
-        if (StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Papersize Lookup not initialised before use");
-        }
-        return SingletonHelper.INSTANCE;
-    }
+    static final Logger LOGGER = LogManager.getLogger();
 	
-    public static void init(String file) throws RuntimeException {
-        if (StringUtils.isBlank(filename)) {
-            if (new File(file).isFile()) {
-                filename = file;
-            } else {
-                throw new RuntimeException("Papersize Lookup File " + filename + " does not exist on filepath.");
-            }
-        } else {
-            throw new RuntimeException("Papersize Lookup has already been initialised");
-        }
-    }
-    /*****************************************************************************************/
+	private Map<String, PaperSizeDivisor> lookup;
+	
     
-	private PapersizeLookup() {
-	    LOGGER.trace("Loading Papersize Lookup file '{}'", filename);
-		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-			String line;
-		    while ((line = br.readLine()) != null) {
-		    	if( !(line.startsWith("#")) ) {
-		    		String[] array = line.split(",",-1);
-		    		lookup.put(array[0].trim(), new PaperSize(Double.parseDouble(array[1].trim())));
-		    	}
-		    }
-		} catch (IndexOutOfBoundsException | IOException | NullPointerException e) {
-			LOGGER.fatal("PapersizeLookup lookup file error: '{}'", e.getMessage());
-			System.exit(1);
-		}
+    /**
+     * Gets the single instance of PapersizeLookup.
+     *
+     * @param filename the filename
+     * @return single instance of PapersizeLookup
+     */
+    public PapersizeLookup getInstance(String filename) {
+        if (StringUtils.isBlank(filename)) {
+            throw new RuntimeException("Papersize Lookup file filename is blank");
+        }
+        
+        if (new File(filename).isFile()) {
+            throw new RuntimeException(String.format("Papersize Lookup file %s does not exist on filepath.", filename));
+        }
+        
+        return new PapersizeLookup(filename);
+    }
+    
+	/**
+	 * Instantiates a new papersize lookup.
+	 *
+	 * @param filename the filename
+	 */
+	private PapersizeLookup(String filename) {
+        Path pathToFile = Paths.get(filename);
+        
+        // create an instance of BufferedReader using try with resource to close resources
+        try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
+            // ignore any line starting with REF
+            lookup = br.lines()
+                    .filter(line -> !line.startsWith("#"))
+                    .map(line -> PaperSizeDivisor.getInstance(line.split(",")))
+                    .collect(Collectors.toMap(PaperSizeDivisor::getType, p -> p));
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format("PaperSize lookup file error : %s", ex.getMessage()));
+        }
 	}
 	
-	public HashMap<String, PaperSize> getLookup() {
+	/**
+	 * Gets the lookup.
+	 *
+	 * @return the lookup
+	 */
+	public Map<String, PaperSizeDivisor> getLookup() {
 		return lookup;
 	}
 	
-	public PaperSize get(String id) {
-        if (StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Papersize Lookup not initialised before use");
-        }
-        return lookup.get(id);
+	public PaperSizeDivisor getPapersizeDivisor(String id) {
+        return lookup.containsKey(id) ? lookup.get(id) : PaperSizeDivisor.getInstance("null", 1);
 	}
 	
-	public boolean containsKey(String key) {
-		return lookup.containsKey(key);
-	}
 }

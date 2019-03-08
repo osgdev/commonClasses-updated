@@ -1,5 +1,8 @@
 package uk.gov.dvla.osg.common.enums;
 
+/**
+ * The Enum Product.
+ */
 public enum Product {
     
 	MM("MAILMARK"),
@@ -10,7 +13,7 @@ public enum Product {
 	
 	private String product;
 	
-	Product(String product) {
+	private Product(String product) {
 		this.product = product;
 	}
 	

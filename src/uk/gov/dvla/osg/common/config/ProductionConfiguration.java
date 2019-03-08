@@ -57,7 +57,7 @@ public class ProductionConfiguration {
      */
     private ProductionConfiguration(String filename) {
 
-        // Loads key/value pairs from file
+        // Loads properties from file
         Properties props = new Properties();
         try (InputStream input = new FileInputStream(new File(filename))) {
             props.load(input);
