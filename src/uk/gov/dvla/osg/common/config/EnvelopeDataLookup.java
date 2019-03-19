@@ -34,11 +34,11 @@ public class EnvelopeDataLookup {
      */
     public static EnvelopeDataLookup getInstance(String filename) {
         if (StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Papersize Lookup file filename is blank");
+            throw new RuntimeException("Envelope Data Lookup file filename is blank");
         }
         
-        if (new File(filename).isFile()) {
-            throw new RuntimeException(String.format("Papersize Lookup file %s does not exist on filepath.", filename));
+        if (!new File(filename).isFile()) {
+            throw new RuntimeException(String.format("Envelope Data Lookup file %s does not exist on filepath.", filename));
         }
         
         return new EnvelopeDataLookup(filename);
@@ -57,7 +57,7 @@ public class EnvelopeDataLookup {
         try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
             // ignore any line starting with #
             this.lookup = br.lines()
-                            .filter(line -> !line.startsWith("#"))
+                            .filter(line -> !line.startsWith("REF"))
                             .map(line -> EnvelopeData.getInstance(line.split(",")))
                             .collect(Collectors.toMap(EnvelopeData::getType, p -> p));
         } catch (IOException ex) {

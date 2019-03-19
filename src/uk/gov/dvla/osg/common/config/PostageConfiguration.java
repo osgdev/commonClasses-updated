@@ -6,7 +6,6 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,9 +36,6 @@ public class PostageConfiguration {
      * @throws RuntimeException the runtime exception
      */
     public static PostageConfiguration getInstance(String filename) throws RuntimeException {
-        if (!StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Production Configuration has already been initialised");
-        }
         
         if (!new File(filename).isFile()) {
             throw new RuntimeException(String.format("Production File %s does not exist on filepath.", filename));

@@ -3,10 +3,10 @@ package uk.gov.dvla.osg.common.classes;
 /**
  * The Class PaperSize.
  */
-public class PaperSizeDivisor {
+public class PaperSize {
 
     private final String type;
-	private final Double divisor;
+	private final Double multiplier;
 
     /**
      * Gets the single instance of PaperSize.
@@ -14,14 +14,14 @@ public class PaperSizeDivisor {
      * @param elements the elements
      * @return single instance of PaperSize
      */
-    public static PaperSizeDivisor getInstance(String[] elements) {
+    public static PaperSize getInstance(String[] elements) {
         String type = elements[0];
         double multiplier = Double.parseDouble(elements[1]);
-        return new PaperSizeDivisor(type, multiplier);
+        return new PaperSize(type, multiplier);
     }
     
-    public static PaperSizeDivisor getInstance(String type, double multiplier) {
-        return new PaperSizeDivisor(type, multiplier);
+    public static PaperSize getInstance(String type, double multiplier) {
+        return new PaperSize(type, multiplier);
     }
     
 	/**
@@ -30,9 +30,9 @@ public class PaperSizeDivisor {
 	 * @param type the type
 	 * @param multiplier the multiplier
 	 */
-	private PaperSizeDivisor(String type, double multiplier) {
+	private PaperSize(String type, double multiplier) {
 	    this.type = type;
-		this.divisor = multiplier;
+		this.multiplier = multiplier;
 	}
 
 	/**
@@ -40,8 +40,8 @@ public class PaperSizeDivisor {
 	 *
 	 * @return the multiplier
 	 */
-	public int getDivisor() {
-		return divisor.intValue();
+	public int getMultiplier() {
+		return multiplier.intValue();
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class PaperSizeDivisor {
 
     @Override
     public String toString() {
-        return String.format("PaperSize [type=%s, multiplier=%s]", type, divisor);
+        return String.format("PaperSize [type=%s, multiplier=%s]", type, multiplier);
     }
 	
 

@@ -5,19 +5,10 @@ package uk.gov.dvla.osg.common.enums;
  */
 public enum Product {
     
-	MM("MAILMARK"),
-	OCR("OCR"),
-	UNSORTED("UNSORTED"),
-	UNCODED("UNCODED"),
-	DEFAULT("DEFAULT");
+	MM,
+	OCR,
+	UNSORTED,
+	UNCODED,
+	DEFAULT;
 	
-	private String product;
-	
-	private Product(String product) {
-		this.product = product;
-	}
-	
-	public String getValue() {
-		return this.product;
-	}
 }

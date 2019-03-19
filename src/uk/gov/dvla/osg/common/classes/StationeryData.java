@@ -11,6 +11,9 @@ public class StationeryData {
 
     /**
      * Gets the single instance of Stationery.
+     * </br>1 = Type
+     * </br>2 = Thickness
+     * </br>3 = Weight
      *
      * @param elements the elements
      * @return single instance of Stationery

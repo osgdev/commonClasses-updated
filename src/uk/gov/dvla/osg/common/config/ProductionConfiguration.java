@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,9 +37,6 @@ public class ProductionConfiguration {
      * @throws RuntimeException the runtime exception
      */
     public static ProductionConfiguration getInstance(String filename) throws RuntimeException {
-        if (!StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Production Configuration has already been initialised");
-        }
         
         if (!new File(filename).isFile()) {
             throw new RuntimeException(String.format("Production File %s does not exist on filepath.", filename));
@@ -72,13 +68,14 @@ public class ProductionConfiguration {
         this.maxMulti = Integer.parseInt(props.getProperty("maxMulti"));
         this.traySize = Integer.parseInt(props.getProperty("traySize"));
         
-        // Group Unsorted, default is off
-        if (props.containsKey("group.underCompliance")) {
-            this.groupUnderCompliance = props.getProperty("group.underCompliance").toUpperCase().equals("Y");
+        // Group Unsorted, default is off      
+        if (props.containsKey("multi.unsorted")) {
+            // Key present in config file so set to the given value
+            this.groupUnderCompliance = props.getProperty("multi.unsorted").toUpperCase().equals("Y");
         } else {
+            // Key not present in config file so default to false
             this.groupUnderCompliance = false;
-        }
-        
+}
         siteMap.put(FullBatchType.FLEETE, props.getProperty("site.english.fleet").toUpperCase());
         siteMap.put(FullBatchType.FLEETW, props.getProperty("site.welsh.fleet").toUpperCase());
         siteMap.put(FullBatchType.MULTIE, props.getProperty("site.english.multi").toUpperCase());
@@ -277,5 +274,9 @@ public class ProductionConfiguration {
      */
     public boolean isBatchTypeOn(String batchtype, String language) {
         return isBatchTypeOn(FullBatchType.get(batchtype, language));
+    }
+    
+    public Map<FullBatchType, Integer> getBatchMaxMap() {
+        return this.batchMaxMap;
     }
 }

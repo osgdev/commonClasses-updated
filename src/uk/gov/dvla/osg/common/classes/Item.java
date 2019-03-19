@@ -10,14 +10,13 @@ public class Item {
 
     private static final String ENDMARKER = "X";
 
-    private String docRef, selectorRef, jobTypeAcronym, mailingId, runNo, runDate, subBatch, fleetNo, groupId, lang, paperSize, 
-                   sortField, eog, sot, sob, name1, name2, add1, add2, add3, add4, add5, postcode, dps, msc, stationery, 
+    private String docRef, selectorRef, jobTypeAcronym, mailingId, runNo, runDate, subBatch, fleetNo, groupId, lang, 
+                   sortField, eog, sot, sob, name1, name2, add1, add2, add3, add4, add5, postcode, dps, msc, 
                    insertRef, envelopeName, customerContent, mmBarcodeContent, 
                    tenDigitJid, sequenceInChild, eightDigitJid, batchSequence, printingSite;
 
-    Double weight, pageThickness;
-    
-    private Integer noOfPages, totalPagesInGroup, presentationPriority, originalIndex;
+    private StationeryData stationery;
+    private Integer noOfPages, totalPagesInGroup, originalIndex, paperSizeMultiplier, trayId, sequenceInTray;
 
     private BatchType batchType;
     private Product product;
@@ -32,11 +31,10 @@ public class Item {
         this.runDate = builder.runDate;
         this.batchType = builder.batchType;
         this.subBatch = builder.subBatch;
-        this.presentationPriority = builder.presentationPriority;        
         this.fleetNo = builder.fleetNo;
         this.groupId = builder.groupId;
         this.lang = builder.lang;
-        this.paperSize = builder.paperSize;
+        this.paperSizeMultiplier = builder.paperSizeMultiplier;
         this.sortField = builder.sortField;
         this.name1 = builder.name1;
         this.name2 = builder.name2;
@@ -52,8 +50,6 @@ public class Item {
         this.envelopeName = builder.envelopeName;
         this.customerContent = builder.customerContent;
         this.mmBarcodeContent = builder.mmBarcodeContent;
-        this.weight = builder.weight;
-        this.pageThickness = builder.pageThickness;
         this.noOfPages = builder.noOfPages;
     }
 
@@ -89,25 +85,19 @@ public class Item {
         return batchType;
     }
     
-    public void updateBatchType(BatchType newBatchType, Integer priority) {
+    public void updateBatchType(BatchType newBatchType) {
         this.batchType = newBatchType;
-        this.presentationPriority = priority;
+        if (newBatchType.equals(BatchType.UNSORTED)) {
+            this.msc = "";
+        }
     }
 
     public boolean isBatchType(BatchType bt) {
         return this.batchType.equals(bt);
     }
 
-    public String getSubBatch() {
-        return subBatch;
-    }
-    
-    public Integer getPresentationPriority() {
-        return presentationPriority;
-    }
-
-    public void setPresentationPriority(Integer presentationPriority) {
-        this.presentationPriority = presentationPriority;
+    public String getSubBatchType() {
+        return StringUtils.defaultString(subBatch);
     }
     
     public String getFleetNo() {
@@ -115,19 +105,19 @@ public class Item {
     }
     
     public String getGroupId() {
-        return groupId;
+        return StringUtils.defaultString(groupId);
     }
 
     public void clearGroupId() {
         this.groupId = "";
     }
     
-    public String getLang() {
+    public String getLanguage() {
         return lang;
     }
     
-    public String getPaperSize() {
-        return paperSize;
+    public int getPaperSizeMultiplier() {
+        return paperSizeMultiplier;
     }
     
     public String getSortField() {
@@ -234,8 +224,12 @@ public class Item {
         this.msc = msc;
     }
     
-    public String getStationery() {
+    public StationeryData getStationery() {
         return stationery;
+    }
+    
+    public String getStationeryType() {
+        return stationery.getType();
     }
     
     public String getInsertRef() {
@@ -267,7 +261,7 @@ public class Item {
     }
     
     public String getCustomerContent() {
-        return customerContent;
+        return StringUtils.defaultString(customerContent);
     }
 
     public void setCustomerContent(String mmCustomerContent) {
@@ -341,15 +335,12 @@ public class Item {
     }
 
     public Double getWeight() {
-        return weight;
+        return stationery.getWeight() * noOfPages;
     }
     
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
     
-    public Double getPageThickness() {
-        return pageThickness;
+    public Double getThickness() {
+        return (stationery.getThickness() * paperSizeMultiplier) * noOfPages;
     }
     
     
@@ -372,7 +363,7 @@ public class Item {
         int result = 1;
         result = prime * result + ((batchType == null) ? 0 : batchType.hashCode());
         result = prime * result + ((lang == null) ? 0 : lang.hashCode());
-        result = prime * result + ((paperSize == null) ? 0 : paperSize.hashCode());
+        result = prime * result + ((paperSizeMultiplier == null) ? 0 : paperSizeMultiplier.hashCode());
         result = prime * result + ((printingSite == null) ? 0 : printingSite.hashCode());
         result = prime * result + ((stationery == null) ? 0 : stationery.hashCode());
         result = prime * result + ((subBatch == null) ? 0 : subBatch.hashCode());
@@ -391,9 +382,9 @@ public class Item {
         if (lang == null) {
             if (other.lang != null) return false;
         } else if (!lang.equals(other.lang)) return false;
-        if (paperSize == null) {
-            if (other.paperSize != null) return false;
-        } else if (!paperSize.equals(other.paperSize)) return false;
+        if (paperSizeMultiplier == null) {
+            if (other.paperSizeMultiplier != null) return false;
+        } else if (!paperSizeMultiplier.equals(other.paperSizeMultiplier)) return false;
         if (printingSite == null) {
             if (other.printingSite != null) return false;
         } else if (!printingSite.equals(other.printingSite)) return false;
@@ -430,7 +421,7 @@ public class Item {
         private String fleetNo;
         private String groupId;
         private String lang;
-        private String paperSize;
+        private int paperSizeMultiplier;
         private String sortField;
         private String name1;
         private String name2;
@@ -442,14 +433,11 @@ public class Item {
         private String postcode;
         private String dps;
         private String msc;
-        private String stationery;
+        private StationeryData stationery;
         private String envelopeName;
         private String customerContent;
         private String mmBarcodeContent;
-        private Double weight;
-        private Double pageThickness;
         private Integer noOfPages;
-        private Integer presentationPriority;
         private Integer originalIndex;
         private BatchType batchType;
 
@@ -507,8 +495,8 @@ public class Item {
             return this;
         }
 
-        public Builder paperSize(String paperSize) {
-            this.paperSize = paperSize;
+        public Builder paperSizeMultiplier(int paperSizeMultiplier) {
+            this.paperSizeMultiplier = paperSizeMultiplier;
             return this;
         }
 
@@ -567,7 +555,7 @@ public class Item {
             return this;
         }
 
-        public Builder withStationery(String stationery) {
+        public Builder stationery(StationeryData stationery) {
             this.stationery = stationery;
             return this;
         }
@@ -587,23 +575,8 @@ public class Item {
             return this;
         }
 
-        public Builder weight(Double weight) {
-            this.weight = weight;
-            return this;
-        }
-
-        public Builder pageThickness(Double pageThickness) {
-            this.pageThickness = pageThickness;
-            return this;
-        }
-
         public Builder noOfPages(Integer noOfPages) {
             this.noOfPages = noOfPages;
-            return this;
-        }
-
-        public Builder presentationPriority(Integer presentationPriority) {
-            this.presentationPriority = presentationPriority;
             return this;
         }
 
@@ -622,5 +595,29 @@ public class Item {
         }
     }
 
+    public void setSequenceInTray(int index) {
+        this.sequenceInTray = index;
+    }
 
+    public void setTrayId(int id) {
+        this.trayId = id;
+    }
+
+    /**
+     * Gets the tray id.
+     *
+     * @return the tray id if assigned, else -1
+     */
+    public Integer getTrayId() {
+        return trayId;
+    }
+
+    /**
+     * Gets the sequence in tray.
+     *
+     * @return the sequence in tray if assigned else -1
+     */
+    public Integer getSequenceInTray() {
+        return sequenceInTray;
+    }
 }

@@ -16,23 +16,20 @@ import org.apache.logging.log4j.Logger;
 
 import uk.gov.dvla.osg.common.enums.BatchType;
 
-public class PresentationConfiguration {
+public class PresentationPriorityLookup {
 
     static final Logger LOGGER = LogManager.getLogger();
     private final List<String> priorityList;
 
-    public static PresentationConfiguration getInstance(String filename) throws RuntimeException {
-        if (!StringUtils.isBlank(filename)) {
-            throw new RuntimeException("Presentation Configuration has already been initialised");
-        }
+    public static PresentationPriorityLookup getInstance(String filename) throws RuntimeException {
         if (!new File(filename).isFile()) {
             throw new RuntimeException("Presentation File " + filename + " does not exist on filepath.");
         }
 
-        return new PresentationConfiguration(filename);
+        return new PresentationPriorityLookup(filename);
     }
 
-    private PresentationConfiguration(String filename) {
+    private PresentationPriorityLookup(String filename) {
 
         Path pathToFile = Paths.get(filename);
         
@@ -44,6 +41,11 @@ public class PresentationConfiguration {
         }
     }
 
+    public int lookupRunOrder(BatchType batchType, String subBatchType) {
+        String batchComparator = StringUtils.isBlank(subBatchType) ? batchType.getName() : String.format("%s_%s", batchType, subBatchType);
+        return priorityList.contains(batchComparator) ? priorityList.indexOf(batchComparator) : 999;
+    }
+    
     public int lookupRunOrder(String batchComparator) {
         return priorityList.contains(batchComparator) ? priorityList.indexOf(batchComparator) : 999;
     }

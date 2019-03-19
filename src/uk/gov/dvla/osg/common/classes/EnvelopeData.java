@@ -19,8 +19,8 @@ public class EnvelopeData {
     public static EnvelopeData getInstance(String[] attributes) {
         String type = attributes[0].trim();
         double thickness = Double.parseDouble(attributes[1].trim());
-        double weight = Double.parseDouble(attributes[3].trim());
         int multiplier = Integer.parseInt(attributes[2].trim());
+        double weight = Double.parseDouble(attributes[3].trim());
         
         return new EnvelopeData(type, thickness, weight, multiplier);
     }
