@@ -51,6 +51,8 @@ public class Item {
         this.customerContent = builder.customerContent;
         this.mmBarcodeContent = builder.mmBarcodeContent;
         this.noOfPages = builder.noOfPages;
+        this.eog = builder.endOfGroup;
+        this.insertRef = builder.insertRef;
     }
 
     public Integer getOriginalIdx() {
@@ -280,8 +282,8 @@ public class Item {
         return tenDigitJid;
     }
 
-    public void setTenDigitJid(Integer tenDigitJid) {
-        this.tenDigitJid = tenDigitJid.toString();
+    public void setTenDigitJid(long tenDigitJid) {
+        this.tenDigitJid = Long.toString(tenDigitJid);
     }
 
     public String getSequenceInChild() {
@@ -340,7 +342,7 @@ public class Item {
     
     
     public Double getThickness() {
-        return (stationery.getThickness() * paperSizeMultiplier) * noOfPages;
+        return (stationery.getThickness() / paperSizeMultiplier) * noOfPages;
     }
     
     
@@ -440,6 +442,8 @@ public class Item {
         private Integer noOfPages;
         private Integer originalIndex;
         private BatchType batchType;
+        private String endOfGroup;
+        private String insertRef;
 
         private Builder(Integer originalIdx) {
             this.originalIndex = originalIdx;
@@ -585,14 +589,26 @@ public class Item {
             return this;
         }
 
-        public Builder batchType(BatchType batchType) {
-            this.batchType = batchType;
+        public Builder batchType(String batchType) {
+            this.batchType = BatchType.valueOf(batchType);
             return this;
         }
 
+        public Builder endOfGroup(String endOfGroup) {
+            this.endOfGroup = endOfGroup;
+            return this;
+        }
+        
+        public Builder insertRef(String insertRef) {
+            this.insertRef = insertRef;
+            return this;
+        }
+        
         public Item build() {
             return new Item(this);
         }
+
+
     }
 
     public void setSequenceInTray(int index) {

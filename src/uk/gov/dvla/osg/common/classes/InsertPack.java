@@ -12,7 +12,11 @@ public class InsertPack {
 
 	/**
 	 * Gets the single instance of InsertPack.
-	 *
+	 * </br>Attributes:
+	 *</br>1. Name
+	 *</br>2. Thickness
+	 *</br>3. Weight
+	 *</br>4. Hopper Code
 	 * @param attributes the attributes
 	 * @return single instance of InsertPack
 	 */

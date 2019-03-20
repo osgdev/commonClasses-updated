@@ -22,6 +22,8 @@ import uk.gov.dvla.osg.common.classes.InsertPack;
 public class InsertLookup {
 
     static final Logger LOGGER = LogManager.getLogger();
+
+    private static final String[] NULL_INSERT = {"NULL","0","0","0"};
     
     private Map<String, InsertPack> lookup;
 
@@ -73,7 +75,7 @@ public class InsertLookup {
      * @return the insert pack
      */
     public InsertPack get(String id) {
-        return lookup.get(id);
+        return lookup.containsKey(id) ? lookup.get(id) : InsertPack.getInstance(NULL_INSERT);
     }
     
    /**

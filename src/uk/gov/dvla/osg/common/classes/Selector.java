@@ -24,7 +24,7 @@ public class Selector {
         String postageConfig = elements[2].trim();
         String presentationConfig = elements[3].trim();
         String documentationConfig = elements[4].trim();
-        String cardDocumentationConfig = elements[5].trim();
+        String cardDocumentationConfig = "";
         return new Selector(type, productionConfig, postageConfig, presentationConfig, documentationConfig, cardDocumentationConfig);
     }
     

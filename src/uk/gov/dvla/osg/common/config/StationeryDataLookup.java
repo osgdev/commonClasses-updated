@@ -33,12 +33,12 @@ public class StationeryDataLookup {
      * @param filename the name and path of the stationery lookup file
      * @return single instance of StationeryLookup
      */
-    public StationeryDataLookup getInstance(String filename) {
+    public static StationeryDataLookup getInstance(String filename) {
         if (StringUtils.isBlank(filename)) {
             throw new RuntimeException("Stationery Lookup file filename is blank");
         }
         
-        if (new File(filename).isFile()) {
+        if (!new File(filename).isFile()) {
             throw new RuntimeException(String.format("Stationery Lookup file %s does not exist on filepath.", filename));
         }
         

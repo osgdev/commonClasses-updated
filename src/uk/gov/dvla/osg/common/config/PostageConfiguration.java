@@ -54,15 +54,15 @@ public class PostageConfiguration {
         } catch (IOException ex) {
             throw new RuntimeException(String.format("Unable to load Production File [%s] : ", filename, ex.getMessage()));
         }
-        
-        this.ukmMAcc = props.getProperty("ukm.m.accNo");
-        this.ukmFAcc = props.getProperty("ukm.f.accNo");
+        // UNSORTED
         this.unsortedAccountNo = props.getProperty("unsort.accNo");
         this.unsortedService = props.getProperty("unsort.service");
         this.unsortedProduct = props.getProperty("unsort.product");
         this.unsortedFormat =props.getProperty("unsort.format");
+        // OCR
         this.ocrProduct = props.getProperty("ocr.product");
         this.ocrFormat = props.getProperty("ocr.format");
+        // MAILMARK
         this.mmScid = props.getProperty("mm.scid");
         this.mmClass = props.getProperty("mm.class");
         this.mmXmlProduct = props.getProperty("mm.xmlProduct");
@@ -76,6 +76,11 @@ public class PostageConfiguration {
         this.mmReturnMailFlag = props.getProperty("mm.returnMailFlag");
         this.mmReturnMailPc = props.getProperty("mm.returnMailPc");
         this.mmReserved = props.getProperty("mm.reserved");
+        this.mmMachineable = props.getProperty("mm.machineable");
+        this.mmAppname = props.getProperty("mm.appName");
+        // UK MAIL
+        this.ukmFAcc = props.getProperty("ukm.f.accNo");
+        this.ukmMAcc = props.getProperty("ukm.m.accNo");
         this.ukmResourcePath = props.getProperty("ukm.resourcePath");
         this.ukmItemIdLookupFile = props.getProperty("ukm.itemIDLookupFilename");
         this.ukmMTrayLookupFile = props.getProperty("ukm.m.trayLookupFilename");
@@ -89,8 +94,6 @@ public class PostageConfiguration {
         this.maxTrayWeight = Integer.parseInt(props.getProperty("ukm.maxTrayWeight"));
         this.ukmMinimumCompliance =Integer.parseInt(props.getProperty("ukm.minimumCompliance"));
         this.ukmBatchTypes = Stream.of(props.getProperty("ukm.batchTypes").split(",")).map(s -> BatchType.valueOf(s.trim())).collect(Collectors.toList());
-        this.mmMachineable = props.getProperty("mm.machineable");
-        this.mmAppname = props.getProperty("mm.appName");
 	}
 
 	/**

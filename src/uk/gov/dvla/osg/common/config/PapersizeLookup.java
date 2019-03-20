@@ -73,7 +73,7 @@ public class PapersizeLookup {
 		return lookup;
 	}
 	
-	public PaperSize getPapersizeDivisor(String id) {
+	public PaperSize getPapersize(String id) {
         return lookup.containsKey(id) ? lookup.get(id) : PaperSize.getInstance("null", 1);
 	}
 	

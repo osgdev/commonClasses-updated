@@ -251,7 +251,8 @@ public class ProductionConfiguration {
      * @return true, if batch type is on
      */
     public boolean isBatchTypeOn(FullBatchType fbt) {
-        return !siteMap.get(fbt).contains("X");
+        String siteValue = siteMap.get(fbt);
+        return !siteValue.contains("X");
     }
 
     /**

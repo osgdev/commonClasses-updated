@@ -19,14 +19,14 @@ import uk.gov.dvla.osg.common.classes.Selector;
 public class SelectorLookup {
     
 	static final Logger LOGGER = LogManager.getLogger();
-	private Map<String, Selector> lookup;
+	private final Map<String, Selector> lookup;
 
-    public SelectorLookup getInstance(String filename) {
+    public static SelectorLookup getInstance(String filename) {
         if (StringUtils.isBlank(filename)) {
             throw new RuntimeException("Selector Lookup file filename is blank");
         }
         
-        if (new File(filename).isFile()) {
+        if (!new File(filename).isFile()) {
             throw new RuntimeException(String.format("Selector Lookup file %s does not exist on filepath.", filename));
         }
         
@@ -41,7 +41,7 @@ public class SelectorLookup {
         try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
             // ignore the first line (header row)from the text file
             lookup = br.lines()
-              .filter(line -> !line.equals("SELECTOR"))
+              .filter(line -> !line.startsWith("SELECTOR"))
               .map(line -> line.split("\\|"))
               .map(elements -> Selector.getInstance(elements))
               .collect(Collectors.toMap(Selector::getType, p -> p));
