@@ -101,10 +101,4 @@ public class Selector {
 		return cardDocumentationConfig;
 	}
 
-    @Override
-    public String toString() {
-        return String.format("Selector [productionConfig=%s, postageConfig=%s, presentationConfig=%s, type=%s, documentationConfig=%s, cardDocumentationConfig=%s]", productionConfig, postageConfig, presentationConfig, type, documentationConfig, cardDocumentationConfig);
-    }
-
-
 }

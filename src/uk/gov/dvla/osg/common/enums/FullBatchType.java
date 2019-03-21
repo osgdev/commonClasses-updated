@@ -39,17 +39,6 @@ public enum FullBatchType {
     }
     
     /**
-     * Gets the.
-     *
-     * @param batchType the batch type
-     * @param lang the lang
-     * @return the full batch type
-     */
-    public static FullBatchType get(String batchType, String lang) {
-        return FullBatchType.valueOf(batchType+lang);
-    }
-    
-    /**
      * Instantiates a new full batch type.
      *
      * @param batchType the batch type
@@ -60,21 +49,4 @@ public enum FullBatchType {
         this.language = lang;
     }
 
-    /**
-     * Gets the batch type.
-     *
-     * @return the batch type
-     */
-    public String getBatchType() {
-        return this.batchType;
-    }
-    
-    /**
-     * Gets the language.
-     *
-     * @return the language
-     */
-    public String getLanguage() {
-        return this.language;
-    }
 }

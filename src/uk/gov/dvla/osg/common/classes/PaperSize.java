@@ -53,11 +53,4 @@ public class PaperSize {
 	    return this.type;
 	}
 
-    @Override
-    public String toString() {
-        return String.format("PaperSize [type=%s, multiplier=%s]", type, multiplier);
-    }
-	
-
-
 }

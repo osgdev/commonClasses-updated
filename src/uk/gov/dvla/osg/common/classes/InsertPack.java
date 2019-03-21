@@ -8,7 +8,7 @@ public class InsertPack {
     private final String type;
 	private final double thickness;
 	private final double weight;
-	private final int hopperCode;
+	private final String hopperCode;
 
 	/**
 	 * Gets the single instance of InsertPack.
@@ -24,7 +24,7 @@ public class InsertPack {
 	    String type = attributes[0].trim();
 	    Double thickness = Double.parseDouble(attributes[1].trim());
 	    Double weight = Double.parseDouble(attributes[2].trim());
-	    int code = Integer.parseInt(attributes[3].trim());
+	    String code = attributes[3];
 	    
 	    return new InsertPack(type, thickness, weight, code);
 	}
@@ -37,7 +37,7 @@ public class InsertPack {
 	 * @param weight the weight
 	 * @param hopperCode the hopper code
 	 */
-	public InsertPack(String type, double thickness, double weight, int hopperCode) {
+	public InsertPack(String type, double thickness, double weight, String hopperCode) {
 		this.type = type;
 	    this.thickness=thickness;
 		this.weight=weight;
@@ -76,13 +76,8 @@ public class InsertPack {
 	 *
 	 * @return the hopper code
 	 */
-	public int getHopperCode() {
+	public String getHopperCode() {
 		return hopperCode;
 	}
-
-    @Override
-    public String toString() {
-        return String.format("InsertPack [type=%s, thickness=%s, weight=%s, hopperCode=%s]", type, thickness, weight, hopperCode);
-    }
 
 }

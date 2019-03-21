@@ -54,7 +54,7 @@ public class PapersizeLookup {
         
         // create an instance of BufferedReader using try with resource to close resources
         try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
-            // ignore any line starting with REF
+            // ignore any line starting with #
             lookup = br.lines()
                     .filter(line -> !line.startsWith("#"))
                     .map(line -> PaperSize.getInstance(line.split(",")))
@@ -62,15 +62,6 @@ public class PapersizeLookup {
         } catch (IOException ex) {
             throw new RuntimeException(String.format("PaperSize lookup file error : %s", ex.getMessage()));
         }
-	}
-	
-	/**
-	 * Gets the lookup.
-	 *
-	 * @return the lookup
-	 */
-	public Map<String, PaperSize> getLookup() {
-		return lookup;
 	}
 	
 	public PaperSize getPapersize(String id) {

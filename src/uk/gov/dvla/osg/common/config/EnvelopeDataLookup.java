@@ -15,7 +15,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import uk.gov.dvla.osg.common.classes.EnvelopeData;
-import uk.gov.dvla.osg.common.enums.EnvelopeType;
 
 /**
  * The Class EnvelopeLookup.
@@ -85,8 +84,4 @@ public class EnvelopeDataLookup {
         return lookup.containsKey(key);
     }
 
-    public EnvelopeData get(EnvelopeType unsortede) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

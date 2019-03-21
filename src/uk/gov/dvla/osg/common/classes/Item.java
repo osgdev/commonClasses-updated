@@ -21,6 +21,8 @@ public class Item {
     private BatchType batchType;
     private Product product;
 
+    private String hopperCode;
+
     private Item(Builder builder) {
         this.originalIndex = builder.originalIndex;
         this.docRef = builder.docRef;
@@ -126,7 +128,7 @@ public class Item {
         return sortField;
     }
 
-    public String getEog() {
+    public String getEndOfGroup() {
         return eog;
     }
 
@@ -142,7 +144,7 @@ public class Item {
         return StringUtils.isNotBlank(eog);
     }
     
-    public String getSot() {
+    public String getStartOfTray() {
         return sot == null ? "" : sot;
     }
 
@@ -210,7 +212,7 @@ public class Item {
         return postcode;
     }
     
-    public String getDps() {
+    public String getDeliveryPointSuffix() {
         return dps;
     }
 
@@ -218,7 +220,7 @@ public class Item {
         this.dps = dps;
     }
     
-    public String getMsc() {
+    public String getMailsortCode() {
         return msc;
     }
 
@@ -270,7 +272,7 @@ public class Item {
         this.customerContent = mmCustomerContent;
     }
     
-    public String getMmBarcodeContent() {
+    public String getMailMarkBarcodeContent() {
         return mmBarcodeContent;
     }
 
@@ -322,7 +324,7 @@ public class Item {
         this.printingSite = site;
     }
     
-    public Product getProduct() {
+    public Product getMailingProduct() {
         return product;
     }
 
@@ -359,6 +361,40 @@ public class Item {
         return str;
     }
 
+    public void setSequenceInTray(int index) {
+        this.sequenceInTray = index;
+    }
+
+    public void setTrayId(int id) {
+        this.trayId = id;
+    }
+
+    /**
+     * Gets the tray id.
+     *
+     * @return the tray id if assigned, else -1
+     */
+    public Integer getTrayId() {
+        return trayId;
+    }
+
+    /**
+     * Gets the sequence in tray.
+     *
+     * @return the sequence in tray if assigned else -1
+     */
+    public Integer getSequenceInTray() {
+        return sequenceInTray;
+    }
+
+    public String getHopperCode() {
+        return hopperCode;
+    }
+
+    public void setHopperCode(String hopperCode) {
+        this.hopperCode = hopperCode;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -607,33 +643,5 @@ public class Item {
         public Item build() {
             return new Item(this);
         }
-
-
-    }
-
-    public void setSequenceInTray(int index) {
-        this.sequenceInTray = index;
-    }
-
-    public void setTrayId(int id) {
-        this.trayId = id;
-    }
-
-    /**
-     * Gets the tray id.
-     *
-     * @return the tray id if assigned, else -1
-     */
-    public Integer getTrayId() {
-        return trayId;
-    }
-
-    /**
-     * Gets the sequence in tray.
-     *
-     * @return the sequence in tray if assigned else -1
-     */
-    public Integer getSequenceInTray() {
-        return sequenceInTray;
     }
 }

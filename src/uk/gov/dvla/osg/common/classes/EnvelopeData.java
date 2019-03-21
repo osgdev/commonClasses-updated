@@ -75,11 +75,4 @@ public class EnvelopeData {
 		return weight;
 	}
 
-    @Override
-    public String toString() {
-        return String.format("EnvelopeData [type=%s, thickness=%s, foldMultiplier=%s, weight=%s]", type, thickness, foldMultiplier, weight);
-    }
-
-
-
 }

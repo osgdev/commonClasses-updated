@@ -3,6 +3,8 @@ package uk.gov.dvla.osg.common.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,6 +63,21 @@ public class Utils {
             } catch (IOException ex) {
                 logger.error("Unable to copy file [{}] : {}", filename, ex.getMessage());
             }
+        }
+    }
+    
+    /**
+     * Sort items.
+     *
+     * @param list the list to sort
+     * @param comparator the comparator
+     */
+    public static void sortItems(List<Item> list, Comparator comparator) {
+        try {
+            Collections.sort(list, comparator);
+        } catch (Exception e) {
+            LOGGER.fatal("Error when sorting: '{}'", e.getMessage());
+            System.exit(1);
         }
     }
 }

@@ -10,11 +10,11 @@ import uk.gov.dvla.osg.common.config.PresentationPriorityLookup;
  * LOCATION -> LANGUAGE -> STATIONERY -> PRESENTATION_ORDER -> SUB_BATCH -> 
  * SORT_FIELD -> FLEET_NO -> MSC -> GROUP_ID -> TRAY_ID -> SEQUENCE_IN_TRAY
  */
-public class ItemComparatorWithLocation implements Comparator<Item> {
+public class ItemComparatorOutputOrder implements Comparator<Item> {
 
     private PresentationPriorityLookup lookup;
 
-    public ItemComparatorWithLocation(PresentationPriorityLookup lookup) {
+    public ItemComparatorOutputOrder(PresentationPriorityLookup lookup) {
         this.lookup = lookup;
 
     }
@@ -67,7 +67,7 @@ public class ItemComparatorWithLocation implements Comparator<Item> {
         }
 
         // MAILSORT CODE
-        int mscResult = o1.getMsc().compareTo(o2.getMsc());
+        int mscResult = o1.getMailsortCode().compareTo(o2.getMailsortCode());
         if (mscResult != 0) {
             return mscResult;
         }

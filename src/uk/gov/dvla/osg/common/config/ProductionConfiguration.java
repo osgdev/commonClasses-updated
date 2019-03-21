@@ -265,17 +265,6 @@ public class ProductionConfiguration {
     public boolean isBatchTypeOn(BatchType batchtype, String language) {
         return isBatchTypeOn(FullBatchType.get(batchtype, language));
     }
-
-    /**
-     * Checks if the provided batch type is to be used.
-     *
-     * @param batchtype the batchtype
-     * @param language the language
-     * @return true, if batch type is on
-     */
-    public boolean isBatchTypeOn(String batchtype, String language) {
-        return isBatchTypeOn(FullBatchType.get(batchtype, language));
-    }
     
     public Map<FullBatchType, Integer> getBatchMaxMap() {
         return this.batchMaxMap;

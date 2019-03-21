@@ -46,11 +46,5 @@ public class PresentationPriorityLookup {
         return priorityList.contains(batchComparator) ? priorityList.indexOf(batchComparator) : 999;
     }
     
-    public int lookupRunOrder(String batchComparator) {
-        return priorityList.contains(batchComparator) ? priorityList.indexOf(batchComparator) : 999;
-    }
 
-    public int lookupRunOrder(BatchType batchType) {
-        return priorityList.contains(batchType.name()) ? priorityList.indexOf(batchType.name()) : 999;
-    }
 }

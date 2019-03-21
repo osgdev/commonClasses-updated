@@ -78,13 +78,4 @@ public class StationeryDataLookup {
         return lookup.get(stationeryType);
     }
     
-    /**
-     * Contains key.
-     *
-     * @param key the key
-     * @return true, if successful
-     */
-    public boolean containsKey(String key) {
-        return lookup.containsKey(key);
-    }
 }

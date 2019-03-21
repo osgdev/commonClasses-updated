@@ -77,14 +77,5 @@ public class InsertLookup {
     public InsertPack get(String id) {
         return lookup.containsKey(id) ? lookup.get(id) : InsertPack.getInstance(NULL_INSERT);
     }
-    
-   /**
-    * Contains key.
-    *
-    * @param key the key
-    * @return true, if successful
-    */
-   public boolean containsKey(String key) {
-       return lookup.containsKey(key);
-   }
+
 }
