@@ -23,6 +23,10 @@ public class Item {
 
     private String hopperCode;
 
+    private Object ott;
+
+    private Object title;
+
     private Item(Builder builder) {
         this.originalIndex = builder.originalIndex;
         this.docRef = builder.docRef;
@@ -106,6 +110,10 @@ public class Item {
     
     public String getFleetNo() {
         return fleetNo;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = Integer.toString(groupId);
     }
     
     public String getGroupId() {
@@ -399,12 +407,18 @@ public class Item {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((batchType == null) ? 0 : batchType.hashCode());
-        result = prime * result + ((lang == null) ? 0 : lang.hashCode());
-        result = prime * result + ((paperSizeMultiplier == null) ? 0 : paperSizeMultiplier.hashCode());
-        result = prime * result + ((printingSite == null) ? 0 : printingSite.hashCode());
-        result = prime * result + ((stationery == null) ? 0 : stationery.hashCode());
-        result = prime * result + ((subBatch == null) ? 0 : subBatch.hashCode());
+        result = prime * result + ((add1 == null) ? 0 : add1.hashCode());
+        result = prime * result + ((add2 == null) ? 0 : add2.hashCode());
+        result = prime * result + ((add3 == null) ? 0 : add3.hashCode());
+        result = prime * result + ((add4 == null) ? 0 : add4.hashCode());
+        result = prime * result + ((add5 == null) ? 0 : add5.hashCode());
+        result = prime * result + ((jobTypeAcronym == null) ? 0 : jobTypeAcronym.hashCode());
+        result = prime * result + ((fleetNo == null) ? 0 : fleetNo.hashCode());
+        result = prime * result + ((name1 == null) ? 0 : name1.hashCode());
+        result = prime * result + ((name2 == null) ? 0 : name2.hashCode());
+        result = prime * result + ((ott == null) ? 0 : ott.hashCode());
+        result = prime * result + ((postcode == null) ? 0 : postcode.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
         return result;
     }
 
@@ -414,24 +428,42 @@ public class Item {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Item other = (Item) obj;
-        if (batchType == null) {
-            if (other.batchType != null) return false;
-        } else if (!batchType.equals(other.batchType)) return false;
-        if (lang == null) {
-            if (other.lang != null) return false;
-        } else if (!lang.equals(other.lang)) return false;
-        if (paperSizeMultiplier == null) {
-            if (other.paperSizeMultiplier != null) return false;
-        } else if (!paperSizeMultiplier.equals(other.paperSizeMultiplier)) return false;
-        if (printingSite == null) {
-            if (other.printingSite != null) return false;
-        } else if (!printingSite.equals(other.printingSite)) return false;
-        if (stationery == null) {
-            if (other.stationery != null) return false;
-        } else if (!stationery.equals(other.stationery)) return false;
-        if (subBatch == null) {
-            if (other.subBatch != null) return false;
-        } else if (!subBatch.equals(other.subBatch)) return false;
+        if (add1 == null) {
+            if (other.add1 != null) return false;
+        } else if (!add1.equals(other.add1)) return false;
+        if (add2 == null) {
+            if (other.add2 != null) return false;
+        } else if (!add2.equals(other.add2)) return false;
+        if (add3 == null) {
+            if (other.add3 != null) return false;
+        } else if (!add3.equals(other.add3)) return false;
+        if (add4 == null) {
+            if (other.add4 != null) return false;
+        } else if (!add4.equals(other.add4)) return false;
+        if (add5 == null) {
+            if (other.add5 != null) return false;
+        } else if (!add5.equals(other.add5)) return false;
+        if (jobTypeAcronym == null) {
+            if (other.jobTypeAcronym != null) return false;
+        } else if (!jobTypeAcronym.equals(other.jobTypeAcronym)) return false;
+        if (fleetNo == null) {
+            if (other.fleetNo != null) return false;
+        } else if (!fleetNo.equals(other.fleetNo)) return false;
+        if (name1 == null) {
+            if (other.name1 != null) return false;
+        } else if (!name1.equals(other.name1)) return false;
+        if (name2 == null) {
+            if (other.name2 != null) return false;
+        } else if (!name2.equals(other.name2)) return false;
+        if (ott == null) {
+            if (other.ott != null) return false;
+        } else if (!ott.equals(other.ott)) return false;
+        if (postcode == null) {
+            if (other.postcode != null) return false;
+        } else if (!postcode.equals(other.postcode)) return false;
+        if (title == null) {
+            if (other.title != null) return false;
+        } else if (!title.equals(other.title)) return false;
         return true;
     }
 
@@ -480,6 +512,8 @@ public class Item {
         private BatchType batchType;
         private String endOfGroup;
         private String insertRef;
+        private String ott;
+        private String title;
 
         private Builder(Integer originalIdx) {
             this.originalIndex = originalIdx;
@@ -637,6 +671,16 @@ public class Item {
         
         public Builder insertRef(String insertRef) {
             this.insertRef = insertRef;
+            return this;
+        }
+        
+        public Builder ott(String ott) {
+            this.ott = ott;
+            return this;
+        }
+        
+        public Builder title(String title) {
+            this.title = title;
             return this;
         }
         

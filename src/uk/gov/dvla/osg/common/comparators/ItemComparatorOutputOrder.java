@@ -42,7 +42,7 @@ public class ItemComparatorOutputOrder implements Comparator<Item> {
 
         // PRESENTATION_ORDER
         int i = lookup.lookupRunOrder(o1.getBatchType(), o1.getSubBatchType());
-        int j = lookup.lookupRunOrder(o1.getBatchType(), o2.getSubBatchType());
+        int j = lookup.lookupRunOrder(o2.getBatchType(), o2.getSubBatchType());
         int presResult = i < j ? -1 : (i == j ? 0 : 1);
         if (presResult != 0) {
             return presResult;
